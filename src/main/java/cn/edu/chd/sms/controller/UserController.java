@@ -38,4 +38,6 @@ public class UserController {
         userService.reg(username,password,repeatedPassword,type);
         return new JsonResult("注册成功");
     }
+
+
 }

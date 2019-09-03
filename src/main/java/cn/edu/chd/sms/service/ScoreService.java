@@ -5,7 +5,7 @@ import cn.edu.chd.sms.entity.Score;
 import java.util.List;
 
 public interface ScoreService {
-    Integer addScore(List<Score> scores, Long uid);
+    Integer addScore(Score scores, Long uid);
     Integer removeScore(Long sid);
     Score getOneScore(Long sid);
     List<Score> getAllScore(Score score);

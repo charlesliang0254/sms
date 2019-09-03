@@ -18,7 +18,7 @@
     </delete>
     <select id="getScoreBySid" resultType="cn.edu.chd.sms.entity.Score">
         select
-        sid,student_id AS studentId,course_id AS courseId,usual_score AS usualScore,attendance_score AS addenanceScore,
+        sid,student_id AS studentId,course_id AS courseId,usual_score AS usualScore,attendance_score AS attendanceScore,
         assignment_score AS assignmentScore,experiment_score AS experimentScore,midterm_score AS midtermScore,
         finalexam_score AS finalexamScore,total_score AS totalScore, reexam_score AS reexamScore,is_submitted AS isSubmitted
         from t_score
@@ -26,7 +26,7 @@
     </select>
     <select id="getScore" resultType="cn.edu.chd.sms.entity.Score">
         select
-        sid,student_id AS studentId,course_id AS courseId,usual_score AS usualScore,attendance_score AS addenanceScore,
+        sid,student_id AS studentId,course_id AS courseId,usual_score AS usualScore,attendance_score AS attendanceScore,
         assignment_score AS assignmentScore,experiment_score AS experimentScore,midterm_score AS midtermScore,
         finalexam_score AS finalexamScore,total_score AS totalScore, reexam_score AS reexamScore,is_submitted AS isSubmitted
         from t_score

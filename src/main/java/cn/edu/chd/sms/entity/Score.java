@@ -1,9 +1,11 @@
 package cn.edu.chd.sms.entity;
 
+import java.io.Serializable;
+
 /**
  * 成绩实体类
  */
-public class Score {
+public class Score implements Serializable {
     private Long sid;//成绩id
     private Long studentId;//学生id
     private Long courseId;//课程id
