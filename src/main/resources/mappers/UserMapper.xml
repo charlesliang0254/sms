@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.chd.sms.mapper.UserMapper">
+    <select id="getUserById" resultType="cn.edu.chd.sms.entity.User">
+        select
+        uid,username,password,`type`,salt,is_delete as isDelete
+        from t_user
+        where uid=#{uid}
+    </select>
+    <select id="getUserByName" resultType="cn.edu.chd.sms.entity.User">
+        select
+        uid,username,password,`type`,salt,is_delete as isDelete
+        from t_user
+        where username=#{username}
+    </select>
+    <insert id="addUser" keyProperty="uid" useGeneratedKeys="true">
+        insert into t_user(username,password,`type`,salt,is_delete)
+        values(#{username},#{password},#{type},#{salt},#{isDelete})
+    </insert>
+</mapper>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.chd.sms.mapper.ScoreMapper">
+    <insert id="addScore" keyProperty="sid" useGeneratedKeys="true">
+        insert into
+        t_score(student_id,course_id,usual_score,attendance_score,
+        assignment_score,experiment_score,midterm_score,finalexam_score,
+        total_score,reexam_score)
+        values(#{studentId},#{courseId},#{usualScore},#{attendanceScore},
+        #{assignmentScore},#{experimentScore},#{midtermScore},#{finalexamScore},
+        #{totalScore},#{reexamScore})
+    </insert>
+    <delete id="removeScore">
+        delete from t_score
+        where sid=#{sid}
+    </delete>
+    <select id="getScoreBySid" resultType="cn.edu.chd.sms.entity.Score">
+        select
+        sid,student_id AS studentId,course_id AS courseId,usual_score AS usualScore,attendance_score AS addenanceScore,
+        assignment_score AS assignmentScore,experiment_score AS experimentScore,midterm_score AS midtermScore,
+        finalexam_score AS finalexamScore,total_score AS totalScore, reexam_score AS reexamScore,is_submitted AS isSubmitted
+        from t_score
+        where sid=#{sid}
+    </select>
+    <select id="getScore" resultType="cn.edu.chd.sms.entity.Score">
+        select
+        sid,student_id AS studentId,course_id AS courseId,usual_score AS usualScore,attendance_score AS addenanceScore,
+        assignment_score AS assignmentScore,experiment_score AS experimentScore,midterm_score AS midtermScore,
+        finalexam_score AS finalexamScore,total_score AS totalScore, reexam_score AS reexamScore,is_submitted AS isSubmitted
+        from t_score
+        <where>
+            <if test="studentId != null and studentId != ''">
+                and student_id=#{studentId}
+            </if>
+            <if test="courseId != null and courseId != ''">
+                and course_id=#{courseId}
+            </if>
+        </where>
+    </select>
+    <update id="updateScore" parameterType="cn.edu.chd.sms.entity.Score">
+        UPDATE
+        t_score
+        <set>
+            <if test="studentId != null and studentId !='' ">
+                student_id=#{studentId},
+            </if>
+            <if test="usualScore != null and usualScore !='' ">
+                usual_score=#{usualScore},
+            </if>
+            <if test="attendanceScore != null and attendanceScore !='' ">
+                attendance_score=#{attendanceScore},
+            </if>
+            <if test="assignmentScore != null and assignmentScore !='' ">
+                assignment_score=#{assignmentScore},
+            </if>
+            <if test="experimentScore != null and experimentScore !='' ">
+                experiment_score=#{experimentScore},
+            </if>
+            <if test="midtermScore != null and midtermScore !='' ">
+                midterm_score=#{midtermScore},
+            </if>
+            <if test="finalexamScore != null and finalexamScore !='' ">
+                finalexam_score=#{finalexamScore},
+            </if>
+            <if test="totalScore != null and totalScore !='' ">
+                total_score=#{totalScore},
+            </if>
+            <if test="reexamScore != null and reexamScore !='' ">
+                reexam_score=#{reexamScore},
+            </if>
+        </set>
+        where sid=#{sid}
+    </update>
+</mapper>

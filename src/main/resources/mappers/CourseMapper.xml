@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.chd.sms.mapper.CourseMapper">
+    <select id="findCourseByCid" resultType="cn.edu.chd.sms.entity.Course">
+        select
+        cid, teacher_id AS teacherId, term, sequence_no AS sequenceNo, course_no AS courseNo, `name`, `type`,
+        credit, usual_weight AS usualWeight, attendance_weight AS attendanceWeight, assignment_weight AS assignmentWeight,
+        experiment_weight AS experimentWeight, midterm_weight AS midtermWeight, finalexam_weight AS finalexamWeight
+        from
+        t_course
+        where
+        cid= #{cid}
+    </select>
+
+    <select id="findCourse" resultType="cn.edu.chd.sms.entity.Course">
+        select
+        cid, teacher_id AS teacherId, term, sequence_no AS sequenceNo, course_no AS courseNo, `name`, `type`,
+        credit, usual_weight AS usualWeight, attendance_weight AS attendanceWeight, assignment_weight AS
+        assignmentWeight,
+        experiment_weight AS experimentWeight, midterm_weight AS midtermWeight, finalexam_weight AS finalexamWeight
+        from
+        t_course
+        <where>
+            <if test="teacherId != null and teacherId != ''">
+                and teacher_id=#{teacherId}
+            </if>
+            <if test="sequenceNo != null and sequenceNo != ''">
+                and sequence_no=#{sequenceNo}
+            </if>
+            <if test="courseNo != null and courseNo != ''">
+                and course_no=#{courseNo}
+            </if>
+            <if test="name != null and name != ''">
+                and `name`=#{name}
+            </if>
+            <if test="type != null and type != ''">
+                and `type`=#{type}
+            </if>
+            <if test="credit != null and credit != ''">
+                and credit=#{credit}
+            </if>
+        </where>
+    </select>
+</mapper>
