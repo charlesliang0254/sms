@@ -15,4 +15,5 @@ public interface ScoreMapper {
     Score getScoreBySid(Long sid);//根据主键查询成绩
     List<Score> getScore(Score score);//根据非主键属性查询课程
     Integer updateScore(Score score);//更新成绩
+    Integer getTotalScorePosition(Long sid,Long cid);//获取成绩排名
 }

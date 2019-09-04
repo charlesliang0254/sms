@@ -42,6 +42,7 @@ public class ScoreController {
     @GetMapping("/course/{cid}/score")
     public JsonResult doGetScoreByCid(HttpSession session,@PathVariable("cid")Long cid){
         //TODO 查找选修某门课程的学生成绩
+
         return new JsonResult();
     }
 
@@ -54,18 +55,20 @@ public class ScoreController {
 
     //更新成绩
     @PutMapping("/score/{sid}")
-    public JsonResult doUpdate(HttpSession session,@PathVariable("sid") Long sid,Score score) {
-  /*      User user = new User();
-        user.setUid((Long) session.getAttribute("uid"));
-        user.setType((Integer) session.getAttribute("type"));*/
-        scoreService.updateScore(score);
+    public JsonResult doUpdate(HttpSession session, @PathVariable("sid") Long sid, Score score) {
+        System.out.println("sid = " + sid);
+        System.out.println("score.getSid() = "+score.getSid());
+        Long uid = (Long) session.getAttribute("uid");
+        score.setSid(sid);
+        scoreService.updateScore(uid,score);
         return new JsonResult("修改成功");
     }
 
     //获得某门课的排名
-    @GetMapping("/course/{cid}/student/{uid}/position")
-    public JsonResult doGetPositionByCid(HttpSession session,@PathVariable("cid") Long cid,@PathVariable("uid")Long uid){
-        //TODO
-        return new JsonResult();
+    @GetMapping("/course/{cid}/score/{sid}/position")
+    public JsonResult doGetPositionByCid(HttpSession session,@PathVariable("cid") Long cid,@PathVariable("sid")Long sid){
+        Long uid = (Long) session.getAttribute("uid");
+        Integer row = scoreService.getTotalScorePostion(uid, sid, cid);
+        return new JsonResult("ok",row);
     }
 }

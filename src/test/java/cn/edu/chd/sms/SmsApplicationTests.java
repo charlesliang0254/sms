@@ -60,9 +60,7 @@ public class SmsApplicationTests {
 
     @Test
     public void m4(){
-        TeacherCourseVO vo = new TeacherCourseVO();
-        vo.setUid(1L);
-        vo.setCid(1L);
-
+        Integer row = scoreMapper.getTotalScorePosition(1L, 1L);
+        System.out.println("row = " + row);
     }
 }

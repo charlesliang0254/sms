@@ -28,7 +28,8 @@
         select
         sid,student_id AS studentId,course_id AS courseId,usual_score AS usualScore,attendance_score AS attendanceScore,
         assignment_score AS assignmentScore,experiment_score AS experimentScore,midterm_score AS midtermScore,
-        finalexam_score AS finalexamScore,total_score AS totalScore, reexam_score AS reexamScore,is_submitted AS isSubmitted
+        finalexam_score AS finalexamScore,total_score AS totalScore, reexam_score AS reexamScore,is_submitted AS
+        isSubmitted
         from t_score
         <where>
             <if test="studentId != null and studentId != ''">
@@ -39,32 +40,39 @@
             </if>
         </where>
     </select>
+    <select id="getTotalScorePosition" resultType="java.lang.Integer">
+        select count(*)
+        from t_score
+        where course_id=#{cid} and total_score>(
+            select total_score from t_score where sid=#{sid}
+        )
+    </select>
     <update id="updateScore" parameterType="cn.edu.chd.sms.entity.Score">
         UPDATE
         t_score
         <set>
-            <if test="studentId != null and studentId !='' ">
+            <if test="studentId != null ">
                 student_id=#{studentId},
             </if>
-            <if test="usualScore != null and usualScore !='' ">
+            <if test="usualScore != null ">
                 usual_score=#{usualScore},
             </if>
-            <if test="attendanceScore != null and attendanceScore !='' ">
+            <if test="attendanceScore != null">
                 attendance_score=#{attendanceScore},
             </if>
-            <if test="assignmentScore != null and assignmentScore !='' ">
+            <if test="assignmentScore != null">
                 assignment_score=#{assignmentScore},
             </if>
-            <if test="experimentScore != null and experimentScore !='' ">
+            <if test="experimentScore != null">
                 experiment_score=#{experimentScore},
             </if>
-            <if test="midtermScore != null and midtermScore !='' ">
+            <if test="midtermScore != null">
                 midterm_score=#{midtermScore},
             </if>
-            <if test="finalexamScore != null and finalexamScore !='' ">
+            <if test="finalexamScore != null">
                 finalexam_score=#{finalexamScore},
             </if>
-            <if test="totalScore != null and totalScore !='' ">
+            <if test="totalScore != null">
                 total_score=#{totalScore},
             </if>
             <if test="reexamScore != null and reexamScore !='' ">

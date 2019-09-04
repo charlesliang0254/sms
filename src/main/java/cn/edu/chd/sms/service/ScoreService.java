@@ -9,5 +9,6 @@ public interface ScoreService {
     Integer removeScore(Long sid);
     Score getOneScore(Long sid);
     List<Score> getAllScore(Score score);
-    void updateScore(Score score);
+    void updateScore(Long uid, Score score);
+    Integer getTotalScorePostion(Long uid, Long sid, Long cid);
 }
