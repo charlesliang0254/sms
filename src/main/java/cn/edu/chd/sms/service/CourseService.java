@@ -7,4 +7,5 @@ import java.util.List;
 public interface CourseService {
     Course findCourseByCid(Long cid);
     List<Course> findCourse(Course course);
+    void updateCourse(Long uid, Course course);
 }

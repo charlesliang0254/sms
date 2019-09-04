@@ -13,5 +13,5 @@ import java.util.List;
 public interface CourseMapper {
     Course findCourseByCid(Long cid);//根据主键查询课程
     List<Course> findCourse(Course course);//根据非主键属性查询课程，非查询条件的属性设为null
-//    List<TeacherCourseVO> findTeacherCourseVO(TeacherCourseVO teacherCourseVO);//多表查询
+    Integer updateCourse(Course course);
 }

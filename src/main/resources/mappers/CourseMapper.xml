@@ -43,4 +43,58 @@
             </if>
         </where>
     </select>
+
+    <update id="updateCourse" parameterType="cn.edu.chd.sms.entity.Course">
+        update
+        t_course
+        <set>
+            <if test="cid != null">
+                cid=#{cid},
+            </if>
+            <if test="teacherId != null and teacherId != ''">
+                teacher_id=#{teacherId},
+            </if>
+            <if test="term != null and term != ''">
+                term=#{term},
+            </if>
+            <if test="sequenceNo != null and sequenceNo != ''">
+                sequence_no=#{sequenceNo},
+            </if>
+            <if test="courseNo != null and courseNo != ''">
+                course_no=#{courseNo},
+            </if>
+            <if test="name != null and name != ''">
+                `name`=#{name},
+            </if>
+            <if test="type != null and type != ''">
+                `type`=#{type},
+            </if>
+            <if test="credit != null and credit != ''">
+                credit=#{credit},
+            </if>
+            <if test="usualWeight != null">
+                usual_weight=#{usualWeight},
+            </if>
+            <if test="attendanceWeight != null and attendanceWeight != ''">
+                attendance_weight=#{attendanceWeight},
+            </if>
+            <if test="assignmentWeight != null and assignmentWeight != ''">
+                assignment_weight=#{assignmentWeight},
+            </if>
+            <if test="experimentWeight != null and experimentWeight != ''">
+                experiment_weight=#{experimentWeight},
+            </if>
+            <if test="midtermWeight != null and midtermWeight != ''">
+                midterm_weight=#{midtermWeight},
+            </if>
+            <if test="finalexamWeight != null and finalexamWeight != ''">
+                finalexam_weight=#{finalexamWeight},
+            </if>
+            <if test="analysisTable != null and analysisTable != ''">
+                analysis_table=#{analysisTable},
+            </if>
+        </set>
+        where
+        cid = #{cid}
+    </update>
 </mapper>
