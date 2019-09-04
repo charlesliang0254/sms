@@ -43,8 +43,8 @@
     <select id="getTotalScorePosition" resultType="java.lang.Integer">
         select count(*)
         from t_score
-        where course_id=#{cid} and total_score>(
-            select total_score from t_score where sid=#{sid}
+        where course_id=#{cid} and is_submitted=1 and total_score>(
+            select total_score from t_score where sid=#{sid} and is_submitted=1
         )
     </select>
     <update id="updateScore" parameterType="cn.edu.chd.sms.entity.Score">
