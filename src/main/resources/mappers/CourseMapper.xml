@@ -7,7 +7,8 @@
         select
         cid, teacher_id AS teacherId, term, sequence_no AS sequenceNo, course_no AS courseNo, `name`, `type`,
         credit, usual_weight AS usualWeight, attendance_weight AS attendanceWeight, assignment_weight AS assignmentWeight,
-        experiment_weight AS experimentWeight, midterm_weight AS midtermWeight, finalexam_weight AS finalexamWeight
+        experiment_weight AS experimentWeight, midterm_weight AS midtermWeight, finalexam_weight AS finalexamWeight,
+        analysis_table as analysisTable
         from
         t_course
         where
@@ -19,7 +20,8 @@
         cid, teacher_id AS teacherId, term, sequence_no AS sequenceNo, course_no AS courseNo, `name`, `type`,
         credit, usual_weight AS usualWeight, attendance_weight AS attendanceWeight, assignment_weight AS
         assignmentWeight,
-        experiment_weight AS experimentWeight, midterm_weight AS midtermWeight, finalexam_weight AS finalexamWeight
+        experiment_weight AS experimentWeight, midterm_weight AS midtermWeight, finalexam_weight AS finalexamWeight,
+        analysis_table as analysisTable
         from
         t_course
         <where>

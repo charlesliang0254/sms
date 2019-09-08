@@ -5,13 +5,20 @@ import cn.edu.chd.sms.entity.User;
 import cn.edu.chd.sms.mapper.ScoreMapper;
 import cn.edu.chd.sms.mapper.UserMapper;
 import cn.edu.chd.sms.service.UserService;
-import cn.edu.chd.sms.vo.TeacherCourseVO;
+import cn.edu.chd.sms.util.XMLParser;
+import jdk.internal.util.xml.XMLStreamException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -27,22 +34,23 @@ public class SmsApplicationTests {
 
     @Test
     public void contextLoads() {
+        System.out.println(new File(".").getAbsolutePath());
     }
 
     @Test
-    public void m1(){
+    public void m1() {
         User user = userMapper.getUserById(1L);
         System.out.println("user = " + user);
     }
 
     @Test
-    public void m2(){
-        Integer row = userService.reg("LJH","123","123",0);
+    public void m2() {
+        Integer row = userService.reg("LJH", "123", "123", 0);
         System.out.println("row = " + row);
     }
 
     @Test
-    public void m3(){
+    public void m3() {
         Score score = new Score();
         score.setStudentId(1L);
         score.setCourseId(1L);
@@ -59,8 +67,28 @@ public class SmsApplicationTests {
     }
 
     @Test
-    public void m4(){
+    public void m4() {
         Integer row = scoreMapper.getTotalScorePosition(1L, 1L);
         System.out.println("row = " + row);
     }
+
+    @Test
+    public void testXML() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("one", 1);
+        map.put("two", 2);
+        map.put("three", 3);
+        Map<String,Object> map1 = new HashMap<>();
+        map1.put("four",4);
+        map.put("map1",map1);
+        try {
+            XMLParser.generateXMLFile("c:/Users/lenovo/Desktop/111.xml",map);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (XMLStreamException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }

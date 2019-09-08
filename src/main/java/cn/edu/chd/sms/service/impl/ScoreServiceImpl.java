@@ -8,10 +8,21 @@ import cn.edu.chd.sms.mapper.ScoreMapper;
 import cn.edu.chd.sms.mapper.UserMapper;
 import cn.edu.chd.sms.service.ScoreService;
 import cn.edu.chd.sms.service.ex.ServiceException;
+import cn.edu.chd.sms.util.XMLParser;
+import org.dom4j.DocumentException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 import static cn.edu.chd.sms.service.util.ServiceUtil.calculateTotalScore;
 import static cn.edu.chd.sms.service.util.ServiceUtil.recalculateTotalScore;
@@ -19,6 +30,7 @@ import static cn.edu.chd.sms.service.util.ServiceUtil.recalculateTotalScore;
 @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 @Service
 public class ScoreServiceImpl implements ScoreService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ScoreServiceImpl.class);
     @Autowired
     private ScoreMapper scoreMapper;
     @Autowired
@@ -52,7 +64,7 @@ public class ScoreServiceImpl implements ScoreService {
         }
 
         //计算总评成绩
-        score.setTotalScore(calculateTotalScore(course,score));
+        score.setTotalScore(calculateTotalScore(course, score));
 
         //将成绩对象持久化
         Integer row = scoreMapper.addScore(score);
@@ -70,17 +82,17 @@ public class ScoreServiceImpl implements ScoreService {
             throw new ServiceException("待删除的成绩id为空");
         }
         Score score = scoreMapper.getScoreBySid(sid);
-        if(score == null){
+        if (score == null) {
             throw new ServiceException("成绩记录不存在");
         }
 
-        if(user.getType()==0){
+        if (user.getType() == 0) {
             //管理员具有最高权限
-        } else if (user.getType()==1) {
-            if(score.getIsSubmitted()==1){
+        } else if (user.getType() == 1) {
+            if (score.getIsSubmitted() == 1) {
                 throw new ServiceException("成绩已经被提交，无法删除，请联系管理员");
             }
-        } else{
+        } else {
             throw new ServiceException("没有删除权限");
         }
 
@@ -99,23 +111,20 @@ public class ScoreServiceImpl implements ScoreService {
         if (s == null) {
             throw new ServiceException("该成绩不存在！");
         }
-        if(user.getType()==0){
+        if (user.getType() == 0) {
 
-        }
-        else if(user.getType()==1){
-            if(courseMapper.findCourseByCid(s.getCourseId())==null){
+        } else if (user.getType() == 1) {
+            if (courseMapper.findCourseByCid(s.getCourseId()) == null) {
                 throw new ServiceException("不允许查询其他课程的成绩");
             }
-        }
-        else if(user.getType()==2){
-            if(s.getStudentId()!=uid){
+        } else if (user.getType() == 2) {
+            if (s.getStudentId() != uid) {
                 throw new ServiceException("不允许查询其他人的成绩");
             }
-            if(s.getIsSubmitted()!=1){
+            if (s.getIsSubmitted() != 1) {
                 throw new ServiceException("成绩尚未被提交");
             }
-        }
-        else{
+        } else {
             throw new ServiceException("没有访问权限");
         }
         return s;
@@ -148,19 +157,17 @@ public class ScoreServiceImpl implements ScoreService {
         }
 
         Course course = courseMapper.findCourseByCid(oldScore.getCourseId());
-        if(course==null){
+        if (course == null) {
             throw new ServiceException("考试对应的课程信息不存在");
         }
 
-        if(user.getType()==0){
+        if (user.getType() == 0) {
             ;//管理员没有限制
-        }
-        else if(user.getType()==1){
-            if(oldScore.getIsSubmitted()==1){
+        } else if (user.getType() == 1) {
+            if (oldScore.getIsSubmitted() == 1) {
                 throw new ServiceException("成绩记录已经被提交，无法修改");
             }
-        }
-        else{
+        } else {
             throw new ServiceException("用户没有修改的权限");
         }
 
@@ -184,40 +191,38 @@ public class ScoreServiceImpl implements ScoreService {
     @Override
     public Integer getTotalScorePosition(Long uid, Long sid, Long cid) {
         User user = verifyUser(uid);
-        if(sid==null||cid==null){
+        if (sid == null || cid == null) {
             throw new ServiceException("成绩ID或课程ID为空");
         }
         Score score = scoreMapper.getScoreBySid(sid);
-        if(score==null){
+        if (score == null) {
             throw new ServiceException("成绩记录不存在");
         }
-        if(score.getIsSubmitted()!=1){
+        if (score.getIsSubmitted() != 1) {
             throw new ServiceException("成绩没有被提交");
         }
 
         Course course = courseMapper.findCourseByCid(cid);
-        if(course==null){
+        if (course == null) {
             throw new ServiceException("课程记录不存在");
         }
 
-        if(user.getType()==0);//什么也不做
-        else if(user.getType()==1){
-            if(course.getTeacherId()!=user.getUid()){
+        if (user.getType() == 0) ;//什么也不做
+        else if (user.getType() == 1) {
+            if (course.getTeacherId() != user.getUid()) {
                 throw new ServiceException("教师只能查询自己课程的成绩排名");
             }
-        }
-        else if(user.getType()==2){
-            if(user.getUid()!=score.getStudentId()){
+        } else if (user.getType() == 2) {
+            if (user.getUid() != score.getStudentId()) {
                 throw new ServiceException("学生只能查询自己的成绩排名");
             }
-        }
-        else{
+        } else {
             throw new ServiceException("不存在这样的用户");
         }
 
         Integer row = scoreMapper.getTotalScorePosition(sid, cid);
 
-        if(row==null){
+        if (row == null) {
             throw new ServiceException("成绩排名查询失败");
         }
         return row;
@@ -228,14 +233,12 @@ public class ScoreServiceImpl implements ScoreService {
         //用户身份的校验
         User u = verifyUser(uid);
 
-        if(u.getType() == 0){
+        if (u.getType() == 0) {
             ;//可以查询任何人的成绩
-        }
-        else if(u.getType() == 2){
+        } else if (u.getType() == 2) {
             score.setIsSubmitted(1);//只能查询提交过的成绩
             score.setStudentId(uid);//只能查询自己的成绩
-        }
-        else {
+        } else {
             throw new ServiceException("不允许查看学生的全部成绩");
         }
 
@@ -245,7 +248,7 @@ public class ScoreServiceImpl implements ScoreService {
             throw new ServiceException("查询成绩失败");
         }
 
-        if(s.isEmpty()){
+        if (s.isEmpty()) {
             throw new ServiceException("查询结果为空");
         }
         return s;
@@ -255,7 +258,7 @@ public class ScoreServiceImpl implements ScoreService {
     public List<Score> getAllScoreByCid(Score score, Long uid) {
         User u = verifyUser(uid);
 
-        if(score.getCourseId()==null){
+        if (score.getCourseId() == null) {
             throw new ServiceException("课程ID为空");
         }
         Course course = courseMapper.findCourseByCid(score.getCourseId());
@@ -263,22 +266,21 @@ public class ScoreServiceImpl implements ScoreService {
             throw new ServiceException("课程不存在");
         }
 
-        if(u.getType()==0){
+        if (u.getType() == 0) {
             ;//管理元查询，什么也不做
         } else if (u.getType() == 1) {
             if (course.getTeacherId() != uid) {
                 throw new ServiceException("不允许查询其他教师课程的成绩");
             }
-        }
-        else {
+        } else {
             throw new ServiceException("没有权限查询成绩列表");
         }
 
         List<Score> s = scoreMapper.getScore(score);
-        if(s==null){
+        if (s == null) {
             throw new ServiceException("成绩查找失败");
         }
-        if(s.isEmpty()){
+        if (s.isEmpty()) {
             throw new ServiceException("查询结果为空");
         }
 
@@ -297,5 +299,168 @@ public class ScoreServiceImpl implements ScoreService {
             throw new ServiceException("用户被禁用");
         }
         return user;
+    }
+
+    @SuppressWarnings("Duplicates")
+    @Override
+    public Map<String, Object> getScoreAnalysis(Long uid, Long cid) {
+        User user = verifyUser(uid);
+        if (cid == null) {
+            throw new ServiceException("没有给出课程号");
+        }
+        Course course = courseMapper.findCourseByCid(cid);
+        if (course == null) {
+            throw new ServiceException("课程不存在");
+        }
+        if (user.getType() == 0) {
+            //管理员
+        } else if (user.getType() == 1) {
+            //教师
+            if (course.getTeacherId() != uid) {
+                throw new ServiceException("不允许查看其他教师的成绩分析表");
+            }
+        } else {
+            throw new ServiceException("没有访问权限");
+        }
+
+        Score cond = new Score();
+        cond.setCourseId(cid);
+        cond.setIsSubmitted(1);
+        List<Score> scoreList = scoreMapper.getScore(cond);
+
+        double[] segments = new double[4];
+        try {
+            Properties scoreProperties = new Properties();
+            scoreProperties.load(new FileReader("src/main/resources/custom.properties"));
+            segments[0] = Double.parseDouble(scoreProperties.getProperty("score.S"));
+            segments[1] = Double.parseDouble(scoreProperties.getProperty("score.A"));
+            segments[2] = Double.parseDouble(scoreProperties.getProperty("score.B"));
+            segments[3] = Double.parseDouble(scoreProperties.getProperty("score.C"));
+        } catch (IOException e) {
+            segments[0] = 90;
+            segments[1] = 80;
+            segments[2] = 70;
+            segments[3] = 60;
+        }
+
+        int[] counts = {0, 0, 0, 0, 0};
+        double max = Double.MIN_VALUE, min = Double.MAX_VALUE;
+        double sum = 0;
+        for (Score score : scoreList) {
+            double total = score.getTotalScore();
+            if (total > max) {
+                max = total;
+            }
+            if (total < min) {
+                min = total;
+            }
+            sum += total;
+            int i = 0;
+            while (i < 4 && total < segments[i]) {
+                i++;
+            }
+            counts[i]++;
+        }
+
+        double average = scoreList.size() == 0 ? 0 : (sum / scoreList.size());
+
+        sum = 0;
+        for (Score score : scoreList) {
+            double total = score.getTotalScore();
+            sum += Math.pow(total - average, 2);
+        }
+        double variance = scoreList.size() == 0 ? 0 : (sum / scoreList.size());
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("segments", counts);
+        map.put("max", max);
+        map.put("min", min);
+        map.put("average", average);
+        map.put("variance", variance);
+        return map;
+    }
+
+    @SuppressWarnings("Duplicates")
+    @Override
+    public Integer saveScoreAnalysisFile(Long uid, Long cid, String parentPath, Map<String, Object> map) {
+        User user = verifyUser(uid);
+        if (cid == null) {
+            throw new ServiceException("没有给出课程号");
+        }
+        Course course = courseMapper.findCourseByCid(cid);
+        if (course == null) {
+            throw new ServiceException("课程不存在");
+        }
+        if (user.getType() == 0) {
+            //管理员
+        } else if (user.getType() == 1) {
+            //教师
+            if (course.getTeacherId() != uid) {
+                throw new ServiceException("不允许查看其他教师的成绩分析表");
+            }
+        } else {
+            throw new ServiceException("没有访问权限");
+        }
+
+        String filename = System.currentTimeMillis() + ".xml";
+        String file = parentPath + File.separator + filename;
+        LOGGER.info("file = "+file);
+        try {
+            XMLParser.generateXMLFile(file, map);
+        } catch (Exception e) {
+            throw new ServiceException("文件存储失败");
+        }
+
+        Course modifiedCourse = new Course();
+        modifiedCourse.setCid(course.getCid());
+        modifiedCourse.setAnalysisTable(filename);
+        Integer row = courseMapper.updateCourse(modifiedCourse);
+        if (row != 1) {
+            throw new ServiceException("数据库更新操作失败");
+        }
+        return row;
+    }
+
+    @SuppressWarnings("Duplicates")
+    @Override
+    public Map<String, Object> getScoreAnalysisFile(Long uid, Long cid, String parentPath) {
+        User user = verifyUser(uid);
+        if (cid == null) {
+            throw new ServiceException("没有给出课程号");
+        }
+        Course course = courseMapper.findCourseByCid(cid);
+        if (course == null) {
+            throw new ServiceException("课程不存在");
+        }
+        if (user.getType() == 0) {
+            //管理员
+        } else if (user.getType() == 1) {
+            //教师
+            if (course.getTeacherId() != uid) {
+                throw new ServiceException("不允许查看其他教师的成绩分析表");
+            }
+        } else {
+            throw new ServiceException("没有访问权限");
+        }
+
+        LOGGER.info("course = "+course);
+        String filename = course.getAnalysisTable();
+        if (StringUtils.isEmpty(filename)) {
+            throw new ServiceException("没有保存的成绩分析表");
+        }
+        File file = new File(parentPath, filename);
+        if (!file.exists()) {
+            throw new ServiceException("原始文件丢失");
+        }
+
+        Map<String, Object> map = null;
+        try {
+            map = XMLParser.parseXMLFile(file.getAbsolutePath());
+        } catch (DocumentException e) {
+            e.printStackTrace();
+            throw new ServiceException("解析xml文件失败");
+        }
+        LOGGER.info("返回的结果:"+map);
+        return map;
     }
 }

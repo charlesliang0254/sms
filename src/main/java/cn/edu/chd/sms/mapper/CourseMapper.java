@@ -1,7 +1,6 @@
 package cn.edu.chd.sms.mapper;
 
 import cn.edu.chd.sms.entity.Course;
-import cn.edu.chd.sms.vo.TeacherCourseVO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
