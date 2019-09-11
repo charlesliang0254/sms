@@ -43,19 +43,15 @@ public class ScoreServiceImpl implements ScoreService {
         //只能由教师添加课程
         User user = verifyUser(userMapper,uid);
         Integer type = user.getType();
-        if (type != 1) {
-            throw new ServiceException("只有教师才能添加成绩");
+        if (!type.equals(1)&&!type.equals(0)) {
+            throw new ServiceException("没有添加成绩的权限");
         }
 
-        //属性值不能为空
-        if (score == null || score.getStudentId() == null || score.getCourseId() == null) {
-            throw new ServiceException("成绩信息不完整");
-        }
         //查询成绩对应课程
-        Course course = courseMapper.findCourseByCid(score.getCourseId());
-        if (course == null) {
-            throw new ServiceException("考试成绩对应的课程不存在");
-        }
+        Course course = verifyCourse(courseMapper,score.getCourseId());
+
+        //验证学生身份
+        verifyUser(userMapper,score.getStudentId());
 
         //教师只能添加自己学生的成绩
         if (!course.getTeacherId().equals(uid)) {
@@ -421,7 +417,7 @@ public class ScoreServiceImpl implements ScoreService {
             //管理员
         } else if (user.getType() == 1) {
             //教师
-            if (course.getTeacherId() != uid) {
+            if (!course.getTeacherId().equals(uid)) {
                 throw new ServiceException("不允许查看其他教师的成绩分析表");
             }
         } else {

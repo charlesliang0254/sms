@@ -4,6 +4,7 @@ import cn.edu.chd.sms.entity.Course;
 import cn.edu.chd.sms.entity.Score;
 import cn.edu.chd.sms.entity.User;
 import cn.edu.chd.sms.mapper.CourseMapper;
+import cn.edu.chd.sms.mapper.ScoreMapper;
 import cn.edu.chd.sms.mapper.UserMapper;
 import cn.edu.chd.sms.service.ex.ServiceException;
 
@@ -96,5 +97,16 @@ public class ServiceUtil {
             throw new ServiceException("课程不存在");
         }
         return course;
+    }
+
+    public static Score verifyScore(ScoreMapper scoreMapper,Long sid){
+        if(sid==null){
+            throw new ServiceException("成绩id为空");
+        }
+        Score score = scoreMapper.getScoreBySid(sid);
+        if(score==null){
+            throw new ServiceException("成绩记录不存在");
+        }
+        return score;
     }
 }

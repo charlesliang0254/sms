@@ -38,3 +38,68 @@ function addScore(){
         }
     })
 }
+
+function getScoreAnalysisData(){
+    var cid=$("#cid").val();
+    $.ajax({
+        "url":"/course/"+cid+"/score_analysis_data",
+        "type":"get",
+        "dataType":"json",
+        "success":function(obj){
+            if(obj.state===1){
+                alert(obj.message);
+                var data = obj.data;
+                $("#d-level").val(data.segments[4]);
+                $("#c-level").val(data.segments[3]);
+                $("#b-level").val(data.segments[2]);
+                $("#a-level").val(data.segments[1]);
+                $("#s-level").val(data.segments[0]);
+                $("#max").val(data.max);
+                $("#min").val(data.min);
+                $("#average").val(data.average);
+                $("#variance").val(data.variance);
+            }
+            else{
+                alert(obj.message);
+            }
+        }
+    });
+}
+
+function saveAnalysisTable(){
+    var cid = $("#cid").val();
+    $.ajax({
+        "url":"/course/"+cid+"/score_analysis",
+        "type":"post",
+        "data":$("#form-analysis-table").serialize(),
+        "dataType":"json",
+        "success":function(obj){
+            if(obj.state===1){
+                alert("添加成绩成功");
+            }
+            else{
+                alert(obj.message);
+            }
+        }
+    });
+}
+
+function getAnalysisTable(){
+    var cid = $("#cid").val();
+    $.ajax({
+        "url":"/course/"+cid+"/score_analysis",
+        "type":"get",
+        "dataType":"json",
+        "success":function(obj){
+            if(obj.state===1){
+                alert("添加成绩成功");
+                for(var elem in obj.data){
+                    $("input[name="+elem+"]").val(obj.data[elem]);
+                }
+            }
+            else{
+                alert(obj.message);
+            }
+        }
+    });
+}

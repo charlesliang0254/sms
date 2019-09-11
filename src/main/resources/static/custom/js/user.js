@@ -9,10 +9,15 @@ function login(){
         "dataType":"json",
         "data":data,
         "success":function(obj){
-            alert(obj.message);
+            if(obj.state===1){
+                alert("登录成功");
+            }
+            else{
+                alert(obj.message);
+            }
         },
-        "error":function(obj){
-            alert(obj.message);
+        "error":function(){
+            alert("未知的错误");
         }
     });
 }
@@ -22,7 +27,7 @@ function register(){
         "username":$("#username").val(),
         "password":$("#password").val(),
         "repeatedPassword":$("#repeated-password").val(),
-        "type":$("#type option:selected").val()
+        "type":2
     };
     $.ajax({
         "url":"/user/reg",
@@ -39,7 +44,7 @@ function register(){
             }
         },
         "error":function () {
-            alert("unknown error occur");
+            alert("未知的错误");
         }
     });
 }
