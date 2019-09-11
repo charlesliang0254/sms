@@ -2,7 +2,6 @@ package cn.edu.chd.sms.controller;
 
 
 import cn.edu.chd.sms.entity.Course;
-import cn.edu.chd.sms.entity.Score;
 import cn.edu.chd.sms.service.CourseService;
 import cn.edu.chd.sms.service.ScoreService;
 import cn.edu.chd.sms.util.JsonResult;
@@ -24,22 +23,25 @@ public class CourseController {
 
     //主键查询
     @GetMapping("/course/{cid}")
-    public JsonResult doFindCourseById(@PathVariable("cid") Long cid) {
-        Course course = courseService.findCourseByCid(cid);
+    public JsonResult doFindCourseById(HttpSession session,@PathVariable("cid") Long cid) {
+        Long uid = (Long) session.getAttribute("uid");
+        Course course = courseService.findCourseByCid(uid, cid);
         return new JsonResult(course);
     }
 
     //根据教师ID查找课程
     @GetMapping("/teacher/{uid}/course")
-    public JsonResult doFindCourseByUid(@PathVariable("uid") Long uid) {
-        //TODO 根据教师ID查找课程
+    public JsonResult doFindCourseByUid(HttpSession session,@PathVariable("uid") Long teacherId) {
+        Long uid = (Long) session.getAttribute("uid");
+        List<Course> courses=courseService.findCourseByTeacherId(uid,teacherId);
         return new JsonResult();
     }
 
     //非主键查询
     @GetMapping("/course")
-    public JsonResult doFindCourse(Course course) {
-        List<Course> courses = courseService.findCourse(course);
+    public JsonResult doFindCourse(HttpSession session,Course course) {
+        Long uid = (Long) session.getAttribute("uid");
+        List<Course> courses = courseService.findCourse(uid,course);
         return new JsonResult(courses);
     }
 

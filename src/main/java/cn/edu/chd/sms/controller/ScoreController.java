@@ -4,7 +4,6 @@ import cn.edu.chd.sms.entity.Score;
 import cn.edu.chd.sms.service.ScoreService;
 import cn.edu.chd.sms.util.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;

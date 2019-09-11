@@ -24,8 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import static cn.edu.chd.sms.service.util.ServiceUtil.calculateTotalScore;
-import static cn.edu.chd.sms.service.util.ServiceUtil.recalculateTotalScore;
+import static cn.edu.chd.sms.service.util.ServiceUtil.*;
 
 @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 @Service
@@ -42,7 +41,7 @@ public class ScoreServiceImpl implements ScoreService {
     @Override
     public Integer addScore(Score score, Long uid) {
         //只能由教师添加课程
-        User user = verifyUser(uid);
+        User user = verifyUser(userMapper,uid);
         Integer type = user.getType();
         if (type != 1) {
             throw new ServiceException("只有教师才能添加成绩");
@@ -77,7 +76,7 @@ public class ScoreServiceImpl implements ScoreService {
     //删除成绩
     @Override
     public Integer removeScore(Long uid, Long sid) {
-        User user = verifyUser(uid);
+        User user = verifyUser(userMapper,uid);
         if (sid == null) {
             throw new ServiceException("待删除的成绩id为空");
         }
@@ -106,7 +105,7 @@ public class ScoreServiceImpl implements ScoreService {
     //根据成绩ID查询成绩
     @Override
     public Score getOneScore(Long uid, Long sid) {
-        User user = verifyUser(uid);
+        User user = verifyUser(userMapper,uid);
         Score s = scoreMapper.getScoreBySid(sid);
         if (s == null) {
             throw new ServiceException("该成绩不存在！");
@@ -149,7 +148,7 @@ public class ScoreServiceImpl implements ScoreService {
     @Override
     public Integer updateScore(Long uid, Score score) {
         //身份的验证
-        User user = verifyUser(uid);
+        User user = verifyUser(userMapper,uid);
 
         Score oldScore = scoreMapper.getScoreBySid(score.getSid());
         if (oldScore == null) {
@@ -190,7 +189,7 @@ public class ScoreServiceImpl implements ScoreService {
     //获得成绩排名
     @Override
     public Integer getTotalScorePosition(Long uid, Long sid, Long cid) {
-        User user = verifyUser(uid);
+        User user = verifyUser(userMapper,uid);
         if (sid == null || cid == null) {
             throw new ServiceException("成绩ID或课程ID为空");
         }
@@ -231,7 +230,7 @@ public class ScoreServiceImpl implements ScoreService {
     @Override
     public List<Score> getAllScoreByStudentId(Long uid, Score score) {
         //用户身份的校验
-        User u = verifyUser(uid);
+        User u = verifyUser(userMapper,uid);
 
         if (u.getType() == 0) {
             ;//可以查询任何人的成绩
@@ -256,7 +255,7 @@ public class ScoreServiceImpl implements ScoreService {
 
     @Override
     public List<Score> getAllScoreByCid(Score score, Long uid) {
-        User u = verifyUser(uid);
+        User u = verifyUser(userMapper,uid);
 
         if (score.getCourseId() == null) {
             throw new ServiceException("课程ID为空");
@@ -287,24 +286,10 @@ public class ScoreServiceImpl implements ScoreService {
         return s;
     }
 
-    private User verifyUser(Long uid) {
-        if (uid == null) {
-            throw new ServiceException("用户id为空");
-        }
-        User user = userMapper.getUserById(uid);
-        if (user == null) {
-            throw new ServiceException("用户不存在");
-        }
-        if (user.getIsDelete() == 1) {
-            throw new ServiceException("用户被禁用");
-        }
-        return user;
-    }
-
     @SuppressWarnings("Duplicates")
     @Override
     public Map<String, Object> getScoreAnalysis(Long uid, Long cid) {
-        User user = verifyUser(uid);
+        User user = verifyUser(userMapper,uid);
         if (cid == null) {
             throw new ServiceException("没有给出课程号");
         }
@@ -383,7 +368,7 @@ public class ScoreServiceImpl implements ScoreService {
     @SuppressWarnings("Duplicates")
     @Override
     public Integer saveScoreAnalysisFile(Long uid, Long cid, String parentPath, Map<String, Object> map) {
-        User user = verifyUser(uid);
+        User user = verifyUser(userMapper,uid);
         if (cid == null) {
             throw new ServiceException("没有给出课程号");
         }
@@ -424,7 +409,7 @@ public class ScoreServiceImpl implements ScoreService {
     @SuppressWarnings("Duplicates")
     @Override
     public Map<String, Object> getScoreAnalysisFile(Long uid, Long cid, String parentPath) {
-        User user = verifyUser(uid);
+        User user = verifyUser(userMapper,uid);
         if (cid == null) {
             throw new ServiceException("没有给出课程号");
         }

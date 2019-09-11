@@ -2,6 +2,10 @@ package cn.edu.chd.sms.service.util;
 
 import cn.edu.chd.sms.entity.Course;
 import cn.edu.chd.sms.entity.Score;
+import cn.edu.chd.sms.entity.User;
+import cn.edu.chd.sms.mapper.CourseMapper;
+import cn.edu.chd.sms.mapper.UserMapper;
+import cn.edu.chd.sms.service.ex.ServiceException;
 
 public class ServiceUtil {
     public static Double recalculateTotalScore(Course course, Score oldScore, Score newScore) {
@@ -67,5 +71,30 @@ public class ServiceUtil {
         } catch (ArithmeticException e) {
             return null;
         }
+    }
+
+    public static User verifyUser(UserMapper userMapper, Long uid) {
+        if (uid == null) {
+            throw new ServiceException("用户id为空");
+        }
+        User user = userMapper.getUserById(uid);
+        if (user == null) {
+            throw new ServiceException("用户不存在");
+        }
+        if (user.getIsDelete() == 1) {
+            throw new ServiceException("用户被禁用");
+        }
+        return user;
+    }
+
+    public static Course verifyCourse(CourseMapper courseMapper, Long cid) {
+        if (cid == null) {
+            throw new ServiceException("课程id为空");
+        }
+        Course course = courseMapper.findCourseByCid(cid);
+        if (course == null) {
+            throw new ServiceException("课程不存在");
+        }
+        return course;
     }
 }

@@ -99,4 +99,15 @@
         where
         cid = #{cid}
     </update>
+
+    <select id="findCourseByTeacherId" resultType="cn.edu.chd.sms.entity.Course">
+        select
+        cid, teacher_id AS teacherId, term, sequence_no AS sequenceNo, course_no AS courseNo, `name`, `type`,
+        credit, usual_weight AS usualWeight, attendance_weight AS attendanceWeight, assignment_weight AS assignmentWeight,
+        experiment_weight AS experimentWeight, midterm_weight AS midtermWeight, finalexam_weight AS finalexamWeight
+        from
+        t_course
+        where
+        teacher_id= #{teacherId}
+    </select>
 </mapper>
