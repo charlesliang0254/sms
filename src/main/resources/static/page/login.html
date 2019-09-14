@@ -12,11 +12,11 @@
   <title>长安大学学生成绩管理系统</title>
 
   <!-- Custom fonts for this template-->
-  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="../plugins/gaogege/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
   <!-- Custom styles for this template-->
-  <link href="css/sb-admin-2.min.css" rel="stylesheet">
+  <link href="../plugins/gaogege/css/sb-admin-2.min.css" rel="stylesheet">
 
 </head>
 
@@ -39,7 +39,7 @@
                   <div class="text-center">
                     <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
                   </div>
-                  <form id="form_login" action="index.html" role="form" class="user">
+                  <form id="form_login" action="course.html" role="form" class="user">
                     <!--用户名-->
                     <div class="form-group">
                       <input type="text" class="form-control form-control-user" id="username" placeholder="输入您的学工号">
@@ -56,9 +56,9 @@
                   </form>
                   <hr>
 
-                  <div class="text-center">
-                    <a class="small" href="register.html">创建账号</a>
-                  </div>
+                  <!--<div class="text-center">-->
+                    <!--<a class="small" href="register.html">创建账号</a>-->
+                  <!--</div>-->
                 </div>
               </div>
             </div>
@@ -72,29 +72,38 @@
   </div>
 
   <!-- Bootstrap core JavaScript-->
-  <script src="vendor/jquery/jquery.min.js"></script>
-  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../plugins/gaogege/vendor/jquery/jquery.min.js"></script>
+  <script src="../plugins/gaogege/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
   <!-- Core plugin JavaScript-->
-  <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+  <script src="../plugins/gaogege/vendor/jquery-easing/jquery.easing.min.js"></script>
 
   <!-- Custom scripts for all pages-->
-  <script src="js/sb-admin-2.min.js"></script>
+  <script src="../plugins/gaogege/js/sb-admin-2.min.js"></script>
   <!--页脚结束-->
   <script type="text/javascript">
     $(function(){
       $("#form_login").on("click","#loginBtn",doLogin);
     });
     function doLogin(){
-      var url="/user/log";
+      var url="/user/login";
       var params={"username":$("#username").val(),
-        "password":$("#password").val()}
-      console.log("params",params);
+        "password":$("#password").val()};
       $.post(url,params,function(obj){
-        console.log("obj",obj)
-        if(obj.state==1){
+        console.log("obj",obj);
+        if(obj.state===1){
           alert(obj.message);
-           location.href="index.html";
+           switch(obj.data.type){
+             case 0:
+               location.href="##";
+               break;
+             case 1:
+               location.href="/page/course.html";
+               break;
+             case 2:
+               location.href="/page/studentScore.html";
+               break;
+           }
         }else{
           alert(obj.message);
         }

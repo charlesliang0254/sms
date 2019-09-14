@@ -9,6 +9,8 @@ import cn.edu.chd.sms.mapper.UserMapper;
 import cn.edu.chd.sms.service.ScoreService;
 import cn.edu.chd.sms.service.ex.ServiceException;
 import cn.edu.chd.sms.util.XMLParser;
+import cn.edu.chd.sms.vo.CourseScore;
+import cn.edu.chd.sms.vo.StudentScore;
 import org.dom4j.DocumentException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -184,20 +186,17 @@ public class ScoreServiceImpl implements ScoreService {
 
     //获得成绩排名
     @Override
-    public Integer getTotalScorePosition(Long uid, Long sid, Long cid) {
+    public Integer getTotalScorePosition(Long uid, Long sid) {
         User user = verifyUser(userMapper,uid);
-        if (sid == null || cid == null) {
-            throw new ServiceException("成绩ID或课程ID为空");
-        }
-        Score score = scoreMapper.getScoreBySid(sid);
-        if (score == null) {
-            throw new ServiceException("成绩记录不存在");
-        }
+        Score score = verifyScore(scoreMapper,sid);
         if (score.getIsSubmitted() != 1) {
             throw new ServiceException("成绩没有被提交");
         }
 
-        Course course = courseMapper.findCourseByCid(cid);
+        if(score.getCourseId()==null){
+            throw new ServiceException("课程ID为空");
+        }
+        Course course = courseMapper.findCourseByCid(score.getCourseId());
         if (course == null) {
             throw new ServiceException("课程记录不存在");
         }
@@ -215,7 +214,7 @@ public class ScoreServiceImpl implements ScoreService {
             throw new ServiceException("不存在这样的用户");
         }
 
-        Integer row = scoreMapper.getTotalScorePosition(sid, cid);
+        Integer row = scoreMapper.getTotalScorePosition(sid, score.getCourseId());
 
         if (row == null) {
             throw new ServiceException("成绩排名查询失败");
@@ -224,20 +223,21 @@ public class ScoreServiceImpl implements ScoreService {
     }
 
     @Override
-    public List<Score> getAllScoreByStudentId(Long uid, Score score) {
+    public List<CourseScore> getAllScoreByStudentId(Long uid, CourseScore courseScore) {
         //用户身份的校验
         User u = verifyUser(userMapper,uid);
 
         if (u.getType() == 0) {
             ;//可以查询任何人的成绩
         } else if (u.getType() == 2) {
-            score.setIsSubmitted(1);//只能查询提交过的成绩
-            score.setStudentId(uid);//只能查询自己的成绩
+            courseScore.setIsSubmitted(1);//只能查询提交过的成绩
+            courseScore.setStudentId(uid);//只能查询自己的成绩
         } else {
             throw new ServiceException("不允许查看学生的全部成绩");
         }
 
-        List<Score> s = scoreMapper.getScore(score);
+        //List<Score> s = scoreMapper.getScore(courseScore);
+        List<CourseScore> s = scoreMapper.getCourseScore(courseScore);
 
         if (s == null) {
             throw new ServiceException("查询成绩失败");
@@ -250,7 +250,7 @@ public class ScoreServiceImpl implements ScoreService {
     }
 
     @Override
-    public List<Score> getAllScoreByCid(Score score, Long uid) {
+    public List<StudentScore> getAllScoreByCid(StudentScore score, Long uid) {
         User u = verifyUser(userMapper,uid);
 
         if (score.getCourseId() == null) {
@@ -264,21 +264,21 @@ public class ScoreServiceImpl implements ScoreService {
         if (u.getType() == 0) {
             ;//管理元查询，什么也不做
         } else if (u.getType() == 1) {
-            if (course.getTeacherId() != uid) {
+            if (!course.getTeacherId().equals(uid)) {
                 throw new ServiceException("不允许查询其他教师课程的成绩");
             }
         } else {
             throw new ServiceException("没有权限查询成绩列表");
         }
 
-        List<Score> s = scoreMapper.getScore(score);
+        //List<Score> s = scoreMapper.getScore(score);
+        List<StudentScore> s = scoreMapper.getStudentScoreList(score);
         if (s == null) {
             throw new ServiceException("成绩查找失败");
         }
         if (s.isEmpty()) {
             throw new ServiceException("查询结果为空");
         }
-
         return s;
     }
 
@@ -357,7 +357,7 @@ public class ScoreServiceImpl implements ScoreService {
         map.put("max", max);
         map.put("min", min);
         map.put("average", average);
-        map.put("variance", variance);
+        map.put("stddev", Math.sqrt(variance));
         return map;
     }
 

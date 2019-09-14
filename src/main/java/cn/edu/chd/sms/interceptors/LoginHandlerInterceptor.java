@@ -5,16 +5,25 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 public class LoginHandlerInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        return false;
+        HttpSession session = request.getSession();
+        Long uid = (Long) session.getAttribute("uid");
+        if(uid == null){
+            response.sendRedirect("/page/login.html");
+            return false;
+        }
+        else{
+            return true;
+        }
     }
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-        //TODO 登录拦截
+
     }
 
     @Override

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>APP信息管理系统</title>
+    <!-- 引入css样式 -->
+    <link rel="stylesheet" href="../plugins/layui/css/layui.css">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo">成绩管理系统</div>
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        <!--<ul class="layui-nav layui-layout-left">
+            <li class="layui-nav-item"><a href="">控制台</a></li>
+            <li class="layui-nav-item"><a href="">商品管理</a></li>
+            <li class="layui-nav-item"><a href="">用户</a></li>
+            <li class="layui-nav-item">
+                <a href="javascript:;">其它系统</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">邮件管理</a></dd>
+                    <dd><a href="">消息管理</a></dd>
+                    <dd><a href="">授权管理</a></dd>
+                </dl>
+            </li>
+        </ul>-->
+        <div hidden="hidden" id="login-uid"></div>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a id="login-username" href="javascript:;">
+                    <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
+                    贤心
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">基本资料</a></dd>
+                    <dd><a href="">安全设置</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a onclick="logout()">退出</a></li>
+        </ul>
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree" lay-filter="test">
+                <!--<li class="layui-nav-item layui-nav-itemed">
+                    <a class="" href="javascript:;">APP账号管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;">列表一</a></dd>
+                        <dd><a href="javascript:;">列表二</a></dd>
+                        <dd><a href="javascript:;">列表三</a></dd>
+                        <dd><a href="">超链接</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;">APP应用管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;">列表一</a></dd>
+                        <dd><a href="javascript:;">列表二</a></dd>
+                        <dd><a href="">超链接</a></dd>
+                    </dl>
+                </li>-->
+                <li class="layui-nav-item"><a href="">课程</a></li>
+                <li class="layui-nav-item"><a href="">成绩</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <table class="layui-table " lay-size="sm" style="table-layout:fixed">
+                <colgroup>
+                    <col width="5%"><!--学期-->
+                    <col width=8%"><!--课程序号-->
+                    <col width=8%"><!--课程编码-->
+                    <col width="8%"><!--课程名-->
+                    <col width="8%"><!--课程类型-->
+                    <col width="5%"><!--学分-->
+                    <col width="8%"><!--成绩类型-->
+                    <col width="5%"><!--平时成绩权重-->
+                    <col width="5%"><!--考勤成绩权重-->
+                    <col width="5%"><!--作业成绩权重-->
+                    <col width="5%"><!--实验成绩权重-->
+                    <col width="5%"><!--期中考试权重-->
+                    <col width="5%"><!--期末考试权重-->
+                    <col width="20%"><!--操作-->
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>学期</th>
+                    <th>课程序号</th>
+                    <th>课程编码</th>
+                    <th>课程名</th>
+                    <th>课程类型</th>
+                    <th>学分</th>
+                    <th>成绩类型</th>
+                    <th>平时成绩权重</th>
+                    <th>考勤成绩权重</th>
+                    <th>作业成绩权重</th>
+                    <th>实验成绩权重</th>
+                    <th>期中考试权重</th>
+                    <th>期末考试权重</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody id="course-list">
+                <tr>
+                    <td>1</td>
+                    <td>123</td>
+                    <td>123</td>
+                    <td>高等数学</td>
+                    <td>公共基础课</td>
+                    <td>5</td>
+                    <td>百分制</td>
+                    <td>0.1</td>
+                    <td>0.1</td>
+                    <td>0.1</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0.7</td>
+                    <td><a href="modifyCourse.html" class="layui-btn layui-btn-sm">修改</a>
+                        <a href="scoreAnalysis.html" class="layui-btn layui-btn-sm">成绩分析</a>
+                        <button class="layui-btn layui-btn-sm">查看成绩</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+<!--<script src="../src/layui.js"></script>-->
+<script src="../plugins/layui/layui.js"></script>
+<script src="/webjars/jquery/3.4.1/jquery.js"></script>
+<script src="../custom/js/user.js"></script>
+<script>
+    //JavaScript代码区域
+    layui.use('element', function () {
+        var element = layui.element;
+    });
+    $("document").ready(function(){
+        $.ajax({
+            "url":"/user",
+            "type":"get",
+            "dataType":"json",
+            "success":function(obj){
+                if(obj.state===1){
+                    $('#login-username').html(obj.data.username);
+                    $('#login-uid').html(obj.data.uid);
+                    initCourseList(obj.data.uid);
+                }
+                else{
+                    alert(obj.message);
+                }
+            },
+            "error":function(obj){
+                alert(obj.message);
+            }
+        });
+    });
+
+    function initCourseList(uid){
+        $.ajax({
+            "url":"/teacher/"+uid+"/course",
+            "type":"get",
+            "dataType":"json",
+            "success":function(obj){
+                if(obj.state===1){
+                    $("#course-list").empty();
+                    var data = obj.data;
+                    var row='<tr>'
+                        +'<td>#{term}</td>'
+                        +'<td>#{sequence-no}</td>'
+                        +'<td>#{course-no}</td>'
+                        +'<td>#{name}</td>'
+                        +'<td>#{type}</td>'
+                        +'<td>#{credit}</td>'
+                        +'<td>#{score-type}</td>'
+                        +'<td>#{usual-weight}</td>'
+                        +'<td>#{attendance-weight}</td>'
+                        +'<td>#{assignment-weight}</td>'
+                        +'<td>#{experiment-weight}</td>'
+                        +'<td>#{midterm-weight}</td>'
+                        +'<td>#{finalexam-weight}</td>'
+                        +'<td><a href="modifyCourse.html?cid=#{cid}" class="layui-btn layui-btn-sm">修改</a>'
+                        +'<a href="scoreAnalysis.html?cid=#{cid}" class="layui-btn layui-btn-sm">成绩分析</a>'
+                        +'<a href="score.html?cid=#{cid}" class="layui-btn layui-btn-sm">查看成绩</a>'
+                        +'</td></tr>';
+
+                    for(var i =0;i<data.length;i++){
+                        html = row.replace(/#{cid}/g,data[i].cid);
+                        html = html.replace("#{term}",data[i].term);
+                        html = html.replace("#{sequence-no}",data[i].sequenceNo);
+                        html = html.replace("#{course-no}",data[i].courseNo);
+                        html = html.replace("#{name}",data[i].name);
+                        switch(data[i].type){
+                            case 0:
+                            default:
+                                html = html.replace("#{type}","其它");
+                                break;
+                            case 1:
+                                html = html.replace("#{type}","通识教育");
+                                break;
+                            case 2:
+                                html = html.replace("#{type}","学科基础");
+                                break;
+                            case 3:
+                                html = html.replace("#{type}","专业发展");
+                                break;
+                            case 4:
+                                html = html.replace("#{type}","实践环节");
+                                break;
+                        }
+                        html = html.replace("#{credit}",data[i].credit);
+                        switch(data[i].scoreType){
+                            case 0:
+                            default:
+                                html = html.replace("#{score-type}","百分制");
+                                break;
+                            case 1:
+                                html = html.replace("#{score-type}","等级制");
+                                break;
+                        }
+                        html = html.replace("#{usual-weight}",data[i].usualWeight);
+                        html = html.replace("#{assignment-weight}",data[i].assignmentWeight);
+                        html = html.replace("#{attendance-weight}",data[i].attendanceWeight);
+                        html = html.replace("#{experiment-weight}",data[i].experimentWeight);
+                        html = html.replace("#{midterm-weight}",data[i].midtermWeight);
+                        html = html.replace("#{finalexam-weight}",data[i].finalexamWeight);
+                        $("#course-list").append(html);
+                    }
+                }
+                else{
+                    alert(obj.message);
+                }
+            },
+            "error":function(obj){
+                alert(obj.message);
+            }
+        });
+    }
+</script>
+</body>
+</html>

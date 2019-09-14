@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>APP信息管理系统</title>
+    <!-- 引入css样式 -->
+    <link rel="stylesheet" href="../plugins/layui/css/layui.css">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo">成绩管理系统</div>
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        <!--<ul class="layui-nav layui-layout-left">
+            <li class="layui-nav-item"><a href="">控制台</a></li>
+            <li class="layui-nav-item"><a href="">商品管理</a></li>
+            <li class="layui-nav-item"><a href="">用户</a></li>
+            <li class="layui-nav-item">
+                <a href="javascript:;">其它系统</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">邮件管理</a></dd>
+                    <dd><a href="">消息管理</a></dd>
+                    <dd><a href="">授权管理</a></dd>
+                </dl>
+            </li>
+        </ul>-->
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:;">
+                    <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
+                    贤心
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">基本资料</a></dd>
+                    <dd><a href="">安全设置</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a href="">退了</a></li>
+        </ul>
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree" lay-filter="test">
+                <!--<li class="layui-nav-item layui-nav-itemed">
+                    <a class="" href="javascript:;">APP账号管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;">列表一</a></dd>
+                        <dd><a href="javascript:;">列表二</a></dd>
+                        <dd><a href="javascript:;">列表三</a></dd>
+                        <dd><a href="">超链接</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;">APP应用管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;">列表一</a></dd>
+                        <dd><a href="javascript:;">列表二</a></dd>
+                        <dd><a href="">超链接</a></dd>
+                    </dl>
+                </li>-->
+                <li class="layui-nav-item"><a href="course.html">课程</a></li>
+                <li class="layui-nav-item"><a href="">成绩</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <form class="layui-form" id="form-score-analysis">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">课程名称</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="courseName" placeholder="请输入课程名称" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">考试性质</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="examProperty" placeholder="请输入考试性质" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">课程学时</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="courseTime" placeholder="请输入课程学时" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">考试方式</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="examType" placeholder="请输入考试方式" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">教学班级</label>
+                    <div class="layui-input-block" style="width: 515px">
+                        <input type="text" name="classNo" placeholder="请输入教学班级" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">考试时间</label>
+                        <div class="layui-input-inline">
+                            <input type="date" name="examDate" placeholder="请输入考试时间" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">试题来源</label>
+                        <div class="layui-input-inline">
+                            <select name="paperSource" >
+                                <option value="0" selected>自主命题</option>
+                                <option value="1">试题库</option>
+                                <option value="2">其它</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">考试人数</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="studentAmount" placeholder="请输入考试人数" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">教师姓名</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="teacherName" placeholder="请输入教师姓名" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">教师职称</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="teacherTitle" placeholder="请输入教师职称" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">所在院系</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="department" placeholder="请输入所在院系" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">优秀人数</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="sLevel" placeholder="请输入优秀人数" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">所占比例</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="sLevelPercentage" placeholder="请输入所占比例" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">良好人数</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="aLevel" placeholder="请输入良好人数" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">所占比例</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="aLevelPercentage" placeholder="请输入所占比例" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">中等人数</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="bLevel" placeholder="请输入中等人数" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">所占比例</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="bLevelPercentage" placeholder="请输入所占比例" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">及格人数</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="cLevel" placeholder="请输入及格人数" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">所占比例</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="cLevelPercentage" placeholder="请输入所占比例" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">不及格人数</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="dLevel" placeholder="请输入不及格人数" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">所占比例</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="dLevelPercentage" placeholder="请输入所占比例" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">最高分</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="max" placeholder="请输入最高分" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">最低分</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="min" placeholder="请输入最低分" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">平均分</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="average" placeholder="请输入平均分" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">标准差</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="stddev" placeholder="请输入标准差" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">试题分析</label>
+                    <div class="layui-input-block" style="width:515px">
+                        <textarea name="paperAnalysis" placeholder="请输入内容" class="layui-textarea"></textarea>
+                    </div>
+                </div>
+
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">成绩分析</label>
+                    <div class="layui-input-block" style="width:515px">
+                        <textarea name="scoreAnalysis" placeholder="请输入内容" class="layui-textarea"></textarea>
+                    </div>
+                </div>
+
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">教学分析</label>
+                    <div class="layui-input-block" style="width:515px">
+                        <textarea name="courseAnalysis" placeholder="请输入内容" class="layui-textarea"></textarea>
+                    </div>
+                </div>
+
+                <div class="layui-form-item" >
+                    <div class="layui-btn-block" style="margin-left: 200px">
+                        <button type="button" class="layui-btn" onclick="saveAnalysisTable()">保存</button>
+                        <button type="button" class="layui-btn" onclick="loadAnalysisTable()">加载</button>
+                        <button type="button" class="layui-btn" onclick="getAnalysisData()">导入数据</button>
+                        <button type="reset" class="layui-btn ">重置</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+<!--<script src="../src/layui.js"></script>-->
+<script src="/webjars/jquery/3.4.1/jquery.js"></script>
+<script src="../plugins/layui/layui.js"></script>
+<script>
+    layui.use(['layer','form','element'], function(){
+    });
+
+    function getAnalysisData(){
+        var cid = location.search.substring(1).split('&')[0].split('=')[1];
+        $.ajax({
+            url:"/course/"+cid+"/score_analysis_data",
+            type:"get",
+            dataType:"json",
+            success:function(obj){
+                if(obj.state===1){
+                    $('input[name=sLevel]').val(obj.data.segments[0]);
+                    $('input[name=aLevel]').val(obj.data.segments[1]);
+                    $('input[name=bLevel]').val(obj.data.segments[2]);
+                    $('input[name=cLevel]').val(obj.data.segments[3]);
+                    $('input[name=dLevel]').val(obj.data.segments[4]);
+                    var total = obj.data.segments[0]
+                        +obj.data.segments[1]
+                        +obj.data.segments[2]
+                        +obj.data.segments[3]
+                        +obj.data.segments[4];
+                    $('input[name=sLevelPercentage]').val(obj.data.segments[0]/total);
+                    $('input[name=aLevelPercentage]').val(obj.data.segments[1]/total);
+                    $('input[name=bLevelPercentage]').val(obj.data.segments[2]/total);
+                    $('input[name=cLevelPercentage]').val(obj.data.segments[3]/total);
+                    $('input[name=dLevelPercentage]').val(obj.data.segments[4]/total);
+                    $('input[name=min]').val(obj.data.min);
+                    $('input[name=max]').val(obj.data.max);
+                    $('input[name=average]').val(obj.data.average);
+                    $('input[name=stddev]').val(obj.data.stddev);
+                }else{
+                    alert(obj.message);
+                }
+            },
+            error:function(){
+                alert('未知错误');
+            }
+        });
+
+    }
+
+    function saveAnalysisTable(){
+        var cid = location.search.substring(1).split('&')[0].split('=')[1];
+        var data = $('#form-score-analysis').serialize();
+        $.ajax({
+            url:"/course/"+cid+"/score_analysis",
+            type:"post",
+            dataType:"json",
+            data:data,
+            success:function(obj){
+                if(obj.state===1){
+                    alert('成绩分析表保存成功');
+                }else{
+                    alert(obj.message);
+                }
+            },
+            error:function(){
+                alert('未知错误导致成绩分析表保存失败');
+            }
+        })
+    }
+
+    function loadAnalysisTable(){
+        var cid = location.search.substring(1).split('&')[0].split('=')[1];
+        $.ajax({
+            url:"/course/"+cid+"/score_analysis",
+            type:"get",
+            dataType:"json",
+            success:function(obj){
+                if(obj.state===1){
+                    for(var key in obj.data){
+                        switch(key){
+                            case  'paperAnalysis':
+                            case 'courseAnalysis':
+                            case 'scoreAnalysis':
+                                $('textarea[name=#{name}]'.replace(/#{name}/,key)).val(obj.data[key]);
+                                break;
+                            case 'paperSource':
+                                $('select[name=#{name}]'.replace(/#{name}/,key)).val(obj.data[key]);
+                                layui.form.render("select");
+                                break;
+                            default:
+                                $('input[name=#{name}]'.replace(/#{name}/,key)).val(obj.data[key]);
+                                break;
+                        }
+                    }
+                }else{
+                    alert(obj.message);
+                }
+            },
+            error:function(){
+                alert('未知错误导致成绩分析表保存失败');
+            }
+        })
+    }
+</script>
+</body>
+</html>

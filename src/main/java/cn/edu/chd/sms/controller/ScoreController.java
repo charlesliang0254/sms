@@ -3,6 +3,8 @@ package cn.edu.chd.sms.controller;
 import cn.edu.chd.sms.entity.Score;
 import cn.edu.chd.sms.service.ScoreService;
 import cn.edu.chd.sms.util.JsonResult;
+import cn.edu.chd.sms.vo.CourseScore;
+import cn.edu.chd.sms.vo.StudentScore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,26 +50,26 @@ public class ScoreController {
     @GetMapping("/course/{cid}/score")
     public JsonResult doGetScoreByCid(HttpSession session,@PathVariable("cid")Long cid){
         Long uid = (Long)session.getAttribute("uid");
-        Score score = new Score();
-        score.setCourseId(cid);
-        List<Score> s = scoreService.getAllScoreByCid(score,uid);
+        StudentScore studentScore = new StudentScore();
+        studentScore.setCourseId(cid);
+        List<StudentScore> s = scoreService.getAllScoreByCid(studentScore,uid);
         return new JsonResult("查询成功！",s);
     }
 
     //查询个人全部成绩
     @GetMapping("/score")
-    public JsonResult doGetScoreList(HttpSession session,Score score){
+    public JsonResult doGetScoreList(HttpSession session, CourseScore courseScore){
         Long uid = (Long) session.getAttribute("uid");
-        List<Score> scoreList = scoreService.getAllScoreByStudentId(uid,score);
+        List<CourseScore> scoreList = scoreService.getAllScoreByStudentId(uid,courseScore);
         return new JsonResult("查询成功！",scoreList);
     }
 
     //查询某人的全部成绩
     @GetMapping("/student/{studentId}/score")
-    public JsonResult doGetScoreListByUid(HttpSession session, @PathVariable("studentId") Long studentId, Score score) {
+    public JsonResult doGetScoreListByUid(HttpSession session, @PathVariable("studentId") Long studentId, CourseScore courseScore) {
         Long uid = (Long) session.getAttribute("uid");
-        score.setStudentId(studentId);
-        List<Score> scoreList = scoreService.getAllScoreByStudentId(uid,score);
+        courseScore.setStudentId(studentId);
+        List<CourseScore> scoreList = scoreService.getAllScoreByStudentId(uid,courseScore);
         return new JsonResult("成绩查询成功", scoreList);
     }
 
@@ -83,10 +85,10 @@ public class ScoreController {
     }
 
     //获得某门课的排名
-    @GetMapping("/course/{cid}/score/{sid}/position")
-    public JsonResult doGetPositionByCid(HttpSession session,@PathVariable("cid") Long cid,@PathVariable("sid")Long sid){
+    @GetMapping("/score/{sid}/position")
+    public JsonResult doGetPositionByCid(HttpSession session,@PathVariable("sid")Long sid){
         Long uid = (Long) session.getAttribute("uid");
-        Integer row = scoreService.getTotalScorePosition(uid, sid, cid);
+        Integer row = scoreService.getTotalScorePosition(uid, sid);
         return new JsonResult("ok",row);
     }
     //成绩提交

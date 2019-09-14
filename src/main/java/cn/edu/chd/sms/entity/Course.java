@@ -12,6 +12,7 @@ public class Course {
     private String name; //课程名称
     private Integer type; //课程类型，0=未分类，1=通识教育课程，2=学科基础课程，3=专业发展课程，4=实践环节
     private Double credit; //学分
+    private Integer scoreType;
     private Double usualWeight; //平时成绩权重
     private Double attendanceWeight; //考勤成绩权重
     private Double assignmentWeight; //作业成绩权重
@@ -149,6 +150,14 @@ public class Course {
         this.isSubmitted = isSubmitted;
     }
 
+    public Integer getScoreType() {
+        return scoreType;
+    }
+
+    public void setScoreType(Integer scoreType) {
+        this.scoreType = scoreType;
+    }
+
     @Override
     public String toString() {
         return "Course{" +
@@ -160,6 +169,7 @@ public class Course {
                 ", name='" + name + '\'' +
                 ", type=" + type +
                 ", credit=" + credit +
+                ", scoreType=" + scoreType +
                 ", usualWeight=" + usualWeight +
                 ", attendanceWeight=" + attendanceWeight +
                 ", assignmentWeight=" + assignmentWeight +

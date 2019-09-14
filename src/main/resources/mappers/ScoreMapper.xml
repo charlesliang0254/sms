@@ -41,11 +41,57 @@
         </where>
     </select>
     <select id="getTotalScorePosition" resultType="java.lang.Integer">
-        select count(*)
+        select count(*)+1
         from t_score
         where course_id=#{cid} and is_submitted=1 and total_score>(
             select total_score from t_score where sid=#{sid} and is_submitted=1
         )
+    </select>
+    <select id="getStudentScoreList" resultType="cn.edu.chd.sms.vo.StudentScore">
+        select
+        username AS studentName,sid,student_id AS studentId,course_id AS courseId,usual_score AS usualScore,attendance_score AS attendanceScore,
+        assignment_score AS assignmentScore,experiment_score AS experimentScore,midterm_score AS midtermScore,
+        finalexam_score AS finalexamScore,total_score AS totalScore, reexam_score AS reexamScore,is_submitted AS
+        isSubmitted
+        from t_score left join t_user on student_id = uid
+        <where>
+            <if test="studentName != null">
+                and username=#{studentName}
+            </if>
+            <if test="studentId != null">
+                and student_id=#{studentId}
+            </if>
+            <if test="courseId != null">
+                and course_id=#{courseId}
+            </if>
+        </where>
+    </select>
+    <select id="getCourseScore" resultType="cn.edu.chd.sms.vo.CourseScore">
+        select
+        term,sequence_no as sequenceNo,course_no as courseNo,`name`,`type`,credit,
+        sid,student_id AS studentId,course_id AS courseId,
+        usual_score AS usualScore,attendance_score AS attendanceScore,
+        assignment_score AS assignmentScore,experiment_score AS experimentScore,midterm_score AS midtermScore,
+        finalexam_score AS finalexamScore,total_score AS totalScore, reexam_score AS reexamScore,t_score.is_submitted AS
+        isSubmitted
+        from t_score inner join t_course on course_id=cid
+        <where>
+            <if test="term != null">
+                and term=#{term}
+            </if>
+            <if test="name != null and name != ''">
+                and `name`=#{name}
+            </if>
+            <if test="type != null">
+                and `type`=#{type}
+            </if>
+            <if test="studentId != null">
+                and student_id=#{studentId}
+            </if>
+            <if test="courseId != null">
+                and course_id=#{courseId}
+            </if>
+        </where>
     </select>
     <update id="updateScore" parameterType="cn.edu.chd.sms.entity.Score">
         UPDATE
@@ -75,8 +121,11 @@
             <if test="totalScore != null">
                 total_score=#{totalScore},
             </if>
-            <if test="reexamScore != null and reexamScore !='' ">
+            <if test="reexamScore != null">
                 reexam_score=#{reexamScore},
+            </if>
+            <if test="isSubmitted != null">
+                is_submitted=#{isSubmitted},
             </if>
         </set>
         where sid=#{sid}

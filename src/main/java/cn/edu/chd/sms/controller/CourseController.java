@@ -5,6 +5,8 @@ import cn.edu.chd.sms.entity.Course;
 import cn.edu.chd.sms.service.CourseService;
 import cn.edu.chd.sms.service.ScoreService;
 import cn.edu.chd.sms.util.JsonResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +18,7 @@ import java.util.List;
  */
 @RestController
 public class CourseController {
+    private static final Logger LOGGER = LoggerFactory.getLogger(CourseController.class);
     @Autowired
     private CourseService courseService;//课程服务层
     @Autowired
@@ -34,7 +37,8 @@ public class CourseController {
     public JsonResult doFindCourseByUid(HttpSession session,@PathVariable("uid") Long teacherId) {
         Long uid = (Long) session.getAttribute("uid");
         List<Course> courses=courseService.findCourseByTeacherId(uid,teacherId);
-        return new JsonResult();
+        LOGGER.debug("根据教师查找课程："+courses);
+        return new JsonResult("查找课程成功",courses);
     }
 
     //非主键查询
@@ -48,6 +52,7 @@ public class CourseController {
     //修改课程
     @PutMapping("/course/{cid}")
     public JsonResult doUpdateCourse(Course course, @PathVariable("cid") Long cid, HttpSession session) {
+        LOGGER.debug("修改课程 course = "+course);
         Long uid = (Long) session.getAttribute("uid");
         course.setCid(cid);
         courseService.updateCourse(uid, course);

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>学生成绩管理系统</title>
+    <link rel="stylesheet" href="../plugins/layui/css/layui.css">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <!-- 导航栏 -->
+    <div class="layui-header">
+        <div class="layui-logo">成绩管理系统</div>
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        <!--<ul class="layui-nav layui-layout-left">
+            <li class="layui-nav-item"><a href="">控制台</a></li>
+            <li class="layui-nav-item"><a href="">商品管理</a></li>
+            <li class="layui-nav-item"><a href="">用户</a></li>
+            <li class="layui-nav-item">
+                <a href="javascript:;">其它系统</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">邮件管理</a></dd>
+                    <dd><a href="">消息管理</a></dd>
+                    <dd><a href="">授权管理</a></dd>
+                </dl>
+            </li>
+        </ul>-->
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:;">
+                    <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
+                    贤心
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">基本资料</a></dd>
+                    <dd><a href="">安全设置</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a href="">退了</a></li>
+        </ul>
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree" lay-filter="test">
+                <!--<li class="layui-nav-item layui-nav-itemed">
+                    <a class="" href="javascript:;">APP账号管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;">列表一</a></dd>
+                        <dd><a href="javascript:;">列表二</a></dd>
+                        <dd><a href="javascript:;">列表三</a></dd>
+                        <dd><a href="">超链接</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;">APP应用管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;">列表一</a></dd>
+                        <dd><a href="javascript:;">列表二</a></dd>
+                        <dd><a href="">超链接</a></dd>
+                    </dl>
+                </li>-->
+                <li class="layui-nav-item" style="padding-left: 40px"><a href="">我的成绩</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <form class="layui-form" id="form-search-condition">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">按学期查找: </label>
+                    <div class="layui-input-inline" style="width: 300px;">
+                        <select name="term">
+                            <option value="">请选择一个学期</option>
+                            <option value="1">大一上</option>
+                            <option value="2">大一下</option>
+                            <option value="3">大二上</option>
+                            <option value="4">大二下</option>
+                            <option value="5">大三上</option>
+                            <option value="6">大三下</option>
+                            <option value="7">大四上</option>
+                            <option value="8">大四下</option>
+                        </select>
+                    </div>
+                    <div class="layui-input-group">
+                        <button type="button" class="layui-btn" onclick="getPersonalScore()">切换学期</button>
+                        <button type="reset" class="layui-btn" onclick="getAllTermScore()">所有学期成绩</button>
+                    </div>
+                </div>
+            </form>
+
+            <table class="layui-table " lay-skin="row" lay-size="sm" style="table-layout:fixed">
+                <colgroup>
+                    <col width="16%"><!--学期学年-->
+                    <col width="8%"><!--课程代码-->
+                    <col width="8%"><!--课程序号-->
+                    <col width="16%"><!--课程名称-->
+                    <col width="12%"><!--课程类型-->
+                    <col width="8%"><!--学分-->
+                    <col width="4%"><!--平时成绩-->
+                    <col width="4%"><!--考勤成绩-->
+                    <col width="4%"><!--作业成绩-->
+                    <col width="4%"><!--实验成绩-->
+                    <col width="4%"><!--期中成绩-->
+                    <col width="4%"><!--期末成绩-->
+                    <col width="4%"><!--补考成绩-->
+                    <col width="4%"><!--最终-->
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>学期学年</th>
+                    <th>课程代码</th>
+                    <th>课程序号</th>
+                    <th>课程名称</th>
+                    <th>课程类型</th>
+                    <th>学分</th>
+                    <th>平时成绩</th>
+                    <th>考勤成绩</th>
+                    <th>作业成绩</th>
+                    <th>实验成绩</th>
+                    <th>期中成绩</th>
+                    <th>期末成绩</th>
+                    <th>最终</th>
+                    <th>补考成绩</th>
+                </tr>
+                </thead>
+                <tbody id="personal-score-list">
+                <tr>
+                    <td>2016-1027</td>
+                    <td>S123</td>
+                    <td>S12301</td>
+                    <td>高等数学</td>
+                    <td>公共基础课</td>
+                    <td>5</td>
+                    <td>60</td>
+                    <td>60</td>
+                    <td>60</td>
+                    <td>60</td>
+                    <td>60</td>
+                    <td>60</td>
+                    <td>60</td>
+                    <td>60</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+
+<script src="../plugins/layui/layui.js"></script>
+<script src="/webjars/jquery/3.4.1/jquery.js"></script>
+<script>
+    //JavaScript代码区域
+
+    layui.use(['form','element'], function(){
+        var form = layui.form;
+    });
+
+    $("document").ready(getPersonalScore());
+
+    function getPersonalScore(){
+        $('#personal-score-list').empty();
+        var data = $('#form-search-condition').serialize();
+        $.ajax({
+            url:"/score",
+            type:"get",
+            dataType:"json",
+            data:data,
+            success:function(obj){
+                if(obj.state===1){
+                    var data = obj.data;
+                    for(var i =0;i<data.length;i++){
+                        var html = "<tr>";
+                        var keys=["term","courseNo","sequenceNo","name","type","credit",
+                            "usualScore","attendanceScore","assignmentScore","experimentScore",
+                            "midtermScore","finalexamScore","totalScore","reexamScore"];
+                        for(var j =0;j<keys.length;j++){
+                            var td = "<td>#</td>";
+                            html+=td.replace(/#/,data[i][keys[j]]);
+                        }
+                        html+="</tr>";
+                        $('#personal-score-list').append(html);
+                    }
+                }
+                else{
+                    alert(obj.message);
+                }
+            },
+            error:function(){
+                alert("未知错误");
+            }
+        });
+    }
+
+    function getAllTermScore(){
+        $('#personal-score-list').empty();
+        $.ajax({
+            url:"/score",
+            type:"get",
+            dataType:"json",
+            success:function(obj){
+                if(obj.state===1){
+                    var data = obj.data;
+                    for(var i =0;i<data.length;i++){
+                        var html = "<tr>";
+                        var keys=["term","courseNo","sequenceNo","name","type","credit",
+                            "usualScore","attendanceScore","assignmentScore","experimentScore",
+                            "midtermScore","finalexamScore","totalScore","reexamScore"];
+                        for(var j =0;j<keys.length;j++){
+                            var td = "<td>#</td>";
+                            html+=td.replace(/#/,data[i][keys[j]]);
+                        }
+                        html+="</tr>";
+                        $('#personal-score-list').append(html);
+                    }
+                }
+                else{
+                    alert(obj.message);
+                }
+            },
+            error:function(){
+                alert("未知错误");
+            }
+        });
+    }
+</script>
+</body>
+</html>
