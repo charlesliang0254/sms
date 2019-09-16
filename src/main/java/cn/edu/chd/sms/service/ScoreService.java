@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface ScoreService {
-    Integer addScore(Score scores, Long uid);
+    Integer addScore(Long uid, Score score, String studentName);
     Integer removeScore(Long uid, Long sid);
     Score getOneScore(Long uid, Long sid);
     @Deprecated

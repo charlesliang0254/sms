@@ -45,24 +45,8 @@
         <div class="layui-side-scroll">
             <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
             <ul class="layui-nav layui-nav-tree" lay-filter="test">
-                <!--<li class="layui-nav-item layui-nav-itemed">
-                    <a class="" href="javascript:;">APP账号管理</a>
-                    <dl class="layui-nav-child">
-                        <dd><a href="javascript:;">列表一</a></dd>
-                        <dd><a href="javascript:;">列表二</a></dd>
-                        <dd><a href="javascript:;">列表三</a></dd>
-                        <dd><a href="">超链接</a></dd>
-                    </dl>
-                </li>
-                <li class="layui-nav-item">
-                    <a href="javascript:;">APP应用管理</a>
-                    <dl class="layui-nav-child">
-                        <dd><a href="javascript:;">列表一</a></dd>
-                        <dd><a href="javascript:;">列表二</a></dd>
-                        <dd><a href="">超链接</a></dd>
-                    </dl>
-                </li>-->
-                <li class="layui-nav-item"><a href="course.html">课程与成绩</a></li>
+                <li class="layui-nav-item layui-nav-itemed">
+                <li class="layui-nav-item"><a href="adminCourse.html">课程与成绩</a></li>
             </ul>
         </div>
     </div>
@@ -120,9 +104,8 @@
                     <td>0</td>
                     <td>0</td>
                     <td>0.7</td>
-                    <td><a href="modifyCourse.html" class="layui-btn layui-btn-sm">修改</a>
-                        <a href="scoreAnalysis.html" class="layui-btn layui-btn-sm">成绩分析</a>
-                        <button class="layui-btn layui-btn-sm">查看成绩</button>
+                    <td>
+                        <a class="layui-btn layui-btn-sm">查看成绩</a>
                     </td>
                 </tr>
                 </tbody>
@@ -144,30 +127,14 @@
     layui.use('element', function () {
         var element = layui.element;
     });
-    $("document").ready(function(){
-        $.ajax({
-            "url":"/user",
-            "type":"get",
-            "dataType":"json",
-            "success":function(obj){
-                if(obj.state===1){
-                    $('#login-username').html(obj.data.username);
-                    $('#login-uid').html(obj.data.uid);
-                    initCourseList(obj.data.uid);
-                }
-                else{
-                    alert(obj.message);
-                }
-            },
-            "error":function(obj){
-                alert(obj.message);
-            }
-        });
+
+    $('document').ready(function(){
+        getCourseList();
     });
 
-    function initCourseList(uid){
+    function getCourseList(){
         $.ajax({
-            "url":"/teacher/"+uid+"/course",
+            "url":"/course",
             "type":"get",
             "dataType":"json",
             "success":function(obj){
@@ -188,9 +155,7 @@
                         +'<td>#{experiment-weight}</td>'
                         +'<td>#{midterm-weight}</td>'
                         +'<td>#{finalexam-weight}</td>'
-                        +'<td><a href="modifyCourse.html?cid=#{cid}" class="layui-btn layui-btn-sm">修改</a>'
-                        +'<a href="scoreAnalysis.html?cid=#{cid}" class="layui-btn layui-btn-sm">成绩分析</a>'
-                        +'<a href="score.html?cid=#{cid}" class="layui-btn layui-btn-sm">查看成绩</a>'
+                        +'<td><a href="adminScore.html?cid=#{cid}" class="layui-btn layui-btn-sm">查看成绩</a>'
                         +'</td></tr>';
 
                     for(var i =0;i<data.length;i++){

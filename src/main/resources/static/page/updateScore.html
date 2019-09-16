@@ -67,56 +67,59 @@
         </div>
     </div>
 
-    <div class="layui-body">
+    <div class="layui-body" style="margin-left: 300px; margin-top:40px;">
         <!-- 内容主体区域 -->
-        <div style="padding: 15px;">
-            <form id="form-course" class="layui-form">
-                <div class="layui-form-item">
-                    <label class="layui-form-label">平时</label>
-                    <div class="layui-input-block" style="width: 300px">
-                        <input type="text" name="usualWeight" lay-verify="number" placeholder="请输入成绩权重" autocomplete="off" class="layui-input">
-                    </div>
+        <form class="layui-form" id="form-add-score">
+            <div class="layui-form-item">
+                <label class="layui-form-label">平时成绩</label>
+                <div class="layui-input-block" style="margin-top: 15px; width:400px;">
+                    <input type="text" name="usualScore"  lay-verify="number" placeholder="请输入标题" autocomplete="off" class="layui-input">
                 </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label" >考勤</label>
-                    <div class="layui-input-block" style="width: 300px">
-                        <input type="text" name="attendanceWeight" lay-verify="number" placeholder="请输入成绩权重" autocomplete="off" class="layui-input">
-                    </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">考勤成绩</label>
+                <div class="layui-input-block" style="margin-top: 15px; width:400px;">
+                    <input type="text" name="attendanceScore"  lay-verify="number" placeholder="请输入标题" autocomplete="off" class="layui-input">
                 </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">作业</label>
-                    <div class="layui-input-block" style="width: 300px">
-                        <input type="text" name="assignmentWeight" lay-verify="number" placeholder="请输入成绩权重" autocomplete="off" class="layui-input">
-                    </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">作业成绩</label>
+                <div class="layui-input-block" style="margin-top: 15px; width:400px;">
+                    <input type="text" name="assignmentScore" lay-verify="number" placeholder="请输入标题" autocomplete="off" class="layui-input">
                 </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">实验</label>
-                    <div class="layui-input-block" style="width: 300px">
-                        <input type="text" name="experimentWeight" lay-verify="number" placeholder="请输入成绩权重" autocomplete="off" class="layui-input">
-                    </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">实验成绩</label>
+                <div class="layui-input-block" style="margin-top: 15px; width:400px;">
+                    <input type="text" name="experimentScore" lay-verify="number" placeholder="请输入标题" autocomplete="off" class="layui-input">
                 </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">期中</label>
-                    <div class="layui-input-block" style="width: 300px">
-                        <input type="text" name="midtermWeight" lay-verify="number" placeholder="请输入成绩权重" autocomplete="off" class="layui-input">
-                    </div>
+            </div>
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">期中成绩</label>
+                <div class="layui-input-block" style="margin-top: 15px; width:400px;">
+                    <input type="text" name="midtermScore" lay-verify="number" placeholder="请输入标题" autocomplete="off" class="layui-input">
                 </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">期末</label>
-                    <div class="layui-input-block" style="width: 300px">
-                        <input type="text" name="finalexamWeight" lay-verify="number" placeholder="请输入成绩权重" autocomplete="off" class="layui-input">
-                    </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">期末成绩</label>
+                <div class="layui-input-block" style="margin-top: 15px; width:400px;">
+                    <input type="text" name="finalexamScore" lay-verify="number" placeholder="请输入标题" autocomplete="off" class="layui-input">
                 </div>
-                <div class="layui-form-item">
-                    <div class="layui-input-block">
-                        <input type="button" class="layui-btn" onclick="modifyCourse()" value="修改"/>
-                        <input type="reset" class="layui-btn layui-btn-primary" value="重置"/>
-                    </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">补考成绩</label>
+                <div class="layui-input-block" style="margin-top: 15px; width:400px;">
+                    <input type="text" name="reexamScore" lay-verify="number" placeholder="请输入标题" autocomplete="off" class="layui-input">
                 </div>
-            </form>
+            </div>
 
-
-        </div>
+            <div class="layui-form-item" style="margin-top: 30px;">
+                <div class="layui-input-block">
+                    <button type="button" onclick="updateScore()" class="layui-btn">保存</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
     </div>
 
     <div class="layui-footer">
@@ -126,35 +129,29 @@
 </div>
 <!--<script src="../src/layui.js"></script>-->
 <script src="../plugins/layui/layui.js"></script>
-<script src="/webjars/jquery/3.4.1/jquery.js"></script>
 <script src="../custom/js/user.js"></script>
+<script src="/webjars/jquery/3.4.1/jquery.js"></script>
 <script>
     //JavaScript代码区域
-    layui.use('form', function(){
-        var form = layui.form;
+    layui.use(['form','element','layer'], function () {
+        var element = layui.element;
 
-        //监听提交
-        form.on('submit(formDemo)', function(data){
-            layer.msg(JSON.stringify(data.field));
-            return false;
-        });
     });
 
-    function modifyCourse(){
-        var cid = location.search.substring(1).split('&')[0].split('=')[1];
-        var data = $('#form-course').serialize()+"&_method=PUT";
+    function updateScore(){
+        var sid = location.search.substring(1).split('&')[1].split('=')[1];
         $.ajax({
-            url:"/course/"+cid,
+            url:"/score/"+sid,
             type:"post",
             dataType:"json",
-            data:data,
+            data:$('#form-add-score').serialize()+"&_method=PUT",
             success:function(obj){
                 if(obj.state===1){
-                    alert('修改成功');
+                    alert('修改成绩成功');
+                    location.href="/page/score.html?"+location.search.substring(1).split('&')[0];
                 }else{
                     alert(obj.message);
                 }
-                location.href="course.html";
             },
             error:function(){
                 alert('未知错误');

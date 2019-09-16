@@ -10,6 +10,7 @@ public class CourseScore extends Score {
     private String name; //课程名称
     private Integer type; //课程类型，0=未分类，1=通识教育课程，2=学科基础课程，3=专业发展课程，4=实践环节
     private Double credit; //学分
+    private Integer ranking;
 
     public Integer getTerm() {
         return term;
@@ -59,6 +60,14 @@ public class CourseScore extends Score {
         this.credit = credit;
     }
 
+    public Integer getRanking() {
+        return ranking;
+    }
+
+    public void setRanking(Integer ranking) {
+        this.ranking = ranking;
+    }
+
     @Override
     public String toString() {
         return "CourseScore{" +
@@ -68,6 +77,7 @@ public class CourseScore extends Score {
                 ", name='" + name + '\'' +
                 ", type=" + type +
                 ", credit=" + credit +
+                ", ranking=" + ranking +
                 "} " + super.toString();
     }
 }

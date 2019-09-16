@@ -5,6 +5,8 @@ import cn.edu.chd.sms.service.ScoreService;
 import cn.edu.chd.sms.util.JsonResult;
 import cn.edu.chd.sms.vo.CourseScore;
 import cn.edu.chd.sms.vo.StudentScore;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,14 +21,16 @@ import java.util.Properties;
  */
 @RestController
 public class ScoreController {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ScoreController.class);
     @Autowired
     private ScoreService scoreService;//成绩服务层
 
     //添加成绩
     @PostMapping("/score")
-    public JsonResult doAddScore(Score score,HttpSession session){
+    public JsonResult doAddScore(HttpSession session, Score score, String studentName){
+        LOGGER.debug("AddScore: score = "+score+", studentName = "+studentName);
         Long uid = (Long) session.getAttribute("uid");
-        scoreService.addScore(score, uid);
+        scoreService.addScore(uid, score, studentName);
         return new JsonResult("添加成绩成功");
     }
 
@@ -100,6 +104,17 @@ public class ScoreController {
         score.setIsSubmitted(1);
         scoreService.updateScore(uid,score);
         return new JsonResult("成绩提交成功");
+    }
+
+    //撤消提交
+    @PutMapping("/score/{sid}/recommit")
+    public JsonResult doRecommitScore(HttpSession session,@PathVariable("sid")Long sid){
+        Long uid = (Long) session.getAttribute("uid");
+        Score score = new Score();
+        score.setSid(sid);
+        score.setIsSubmitted(0);
+        scoreService.updateScore(uid,score);
+        return new JsonResult("成绩提交撤销成功");
     }
 
     //生成成绩分析数据

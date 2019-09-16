@@ -45,27 +45,12 @@
         <div class="layui-side-scroll">
             <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
             <ul class="layui-nav layui-nav-tree" lay-filter="test">
-                <!--<li class="layui-nav-item layui-nav-itemed">
-                    <a class="" href="javascript:;">APP账号管理</a>
-                    <dl class="layui-nav-child">
-                        <dd><a href="javascript:;">列表一</a></dd>
-                        <dd><a href="javascript:;">列表二</a></dd>
-                        <dd><a href="javascript:;">列表三</a></dd>
-                        <dd><a href="">超链接</a></dd>
-                    </dl>
-                </li>
-                <li class="layui-nav-item">
-                    <a href="javascript:;">APP应用管理</a>
-                    <dl class="layui-nav-child">
-                        <dd><a href="javascript:;">列表一</a></dd>
-                        <dd><a href="javascript:;">列表二</a></dd>
-                        <dd><a href="">超链接</a></dd>
-                    </dl>
-                </li>-->
-                <li class="layui-nav-item"><a href="course.html">课程与成绩</a></li>
+                <li class="layui-nav-item layui-nav-itemed">
+                <li class="layui-nav-item"><a href="adminCourse.html">课程与成绩</a></li>
             </ul>
         </div>
     </div>
+
     <div class="layui-body">
         <!-- 内容主体区域 -->
         <div style="padding: 15px;">
@@ -124,8 +109,7 @@
     <div class="layui-footer">
         <!-- 底部固定区域 -->
         <div class="layui-layout-right">
-            <a id="btn-addScore" class="layui-btn layui-btn-radius">添加成绩</a>
-            <button onclick="commitAll()" class="layui-btn layui-btn-radius">提交成绩</button>
+            <button onclick="recommitAll()" class="layui-btn layui-btn-radius">撤销提交</button>
         </div>
 
     </div>
@@ -138,10 +122,6 @@
     //JavaScript代码区域
     layui.use(['element','table'], function () {
         var element = layui.element;
-    });
-
-    $('document').ready(function(){
-        $('#btn-addScore').attr('href','/page/addScore.html'+location.search);
     });
 
     $(function initScoreList() {
@@ -165,9 +145,8 @@
                         + '<td>#{totalScore}</td>'
                         + '<td>#{reexamScore}</td>'
                         + '<td>#{isSubmitted}</td>'
-                        + '<td><a href="/page/updateScore.html?cid=#{courseId}&sid=#{sid}" class="layui-btn layui-btn-sm">修改</a>'
-                        + '<button onclick="removeScore(event)" class="layui-btn layui-btn-sm">删除</button>'
-                        + '<button onclick="commitScore(event)" class="layui-btn layui-btn-sm">提交</button></td></tr>';
+                        + '<td><button onclick="removeScore(event)" class="layui-btn layui-btn-sm">删除</button>'
+                        + '<button onclick="recommitScore(event)" class="layui-btn layui-btn-sm">撤销提交</button></td></tr>';
                     for (var i = 0; i<data.length; i++) {
                         var html = row;
                         for(var key in data[i]){
@@ -178,14 +157,17 @@
                                 else{
                                     html = html.replace("#{isSubmitted}",'已提交');
                                 }
-                            }else if(key==='sid'){
-                                html = html.replace(/#{sid}/g,data[i].sid);
                             }
                             else{
-                                html = html.replace('#{'+key+'}',data[i][key]);
+                                if(data[i][key]==null){
+                                    html = html.replace("#{"+key+"}",'');
+                                }else{
+                                    html = html.replace("#{"+key+"}",data[i][key]);
+                                }
+
                             }
+
                         }
-                        html=html.replace(/null/g,'');
                         $('#score-list').append(html);
                     }
                 } else {
@@ -223,11 +205,11 @@
         })
     }
 
-    function commitScore(event){
+    function recommitScore(event){
         var tr = $(event.srcElement).parent().parent();
         var sid = tr.children().first().html();
         $.ajax({
-            url:"/score/"+sid+"/commit",
+            url:"/score/"+sid+"/recommit",
             type:"post",
             dataType:"json",
             data:{
@@ -235,7 +217,7 @@
             },
             success:function(obj){
                 if(obj.state===1){
-                    alert("提交成功");
+                    alert("已撤销本次提交");
                     location.reload(true);
                 }
                 else{
@@ -248,16 +230,16 @@
         })
     }
 
-    function commitAll(){
+    function recommitAll(){
         var table = $('#score-list');
         var rows = table.children();
         rows.each(function(){
             var row = $(this);
             var sid = row.children().eq(0).html();
             var isSubmitted = row.children().eq(10).html();
-            if(isSubmitted==='未提交'){
+            if(isSubmitted==='已提交'){
                 $.ajax({
-                    url:"/score/"+sid+"/commit",
+                    url:"/score/"+sid+"/recommit",
                     type:"post",
                     dataType:"json",
                     data:{

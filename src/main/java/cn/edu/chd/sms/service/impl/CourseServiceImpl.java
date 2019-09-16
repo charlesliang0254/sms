@@ -43,6 +43,14 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public List<Course> findCourse(Long uid,Course course) {
         User user = verifyUser(userMapper,uid);
+        switch(user.getType()){
+            case 0:
+                break;
+            case 1:
+            case 2:
+            default:
+                throw new ServiceException("没有访问权限");
+        }
         if (course == null) {
             throw new ServiceException("查询错误！");
         }

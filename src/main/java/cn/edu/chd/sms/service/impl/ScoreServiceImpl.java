@@ -41,7 +41,7 @@ public class ScoreServiceImpl implements ScoreService {
 
     //添加成绩
     @Override
-    public Integer addScore(Score score, Long uid) {
+    public Integer addScore(Long uid, Score score, String studentName) {
         //只能由教师添加课程
         User user = verifyUser(userMapper,uid);
         Integer type = user.getType();
@@ -49,11 +49,18 @@ public class ScoreServiceImpl implements ScoreService {
             throw new ServiceException("没有添加成绩的权限");
         }
 
+        //验证学生身份
+        //verifyUser(userMapper,score.getStudentId());
+        User student = userMapper.getUserByName(studentName);
+        if(student==null||student.getType()!=2){
+            throw new ServiceException("该学生不存在");
+        }
+        score.setStudentId(student.getUid());
+
         //查询成绩对应课程
         Course course = verifyCourse(courseMapper,score.getCourseId());
 
-        //验证学生身份
-        verifyUser(userMapper,score.getStudentId());
+
 
         //教师只能添加自己学生的成绩
         if (!course.getTeacherId().equals(uid)) {
@@ -245,6 +252,11 @@ public class ScoreServiceImpl implements ScoreService {
 
         if (s.isEmpty()) {
             throw new ServiceException("查询结果为空");
+        }
+
+        for(CourseScore cs:s){
+            Integer ranking = scoreMapper.getTotalScorePosition(cs.getSid(),cs.getCourseId());
+            cs.setRanking(ranking);
         }
         return s;
     }
