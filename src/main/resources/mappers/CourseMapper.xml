@@ -25,7 +25,10 @@
         from
         t_course
         <where>
-            <if test="teacherId != null and teacherId != ''">
+            <if test="term != null">
+                and term=#{term}
+            </if>
+            <if test="teacherId != null">
                 and teacher_id=#{teacherId}
             </if>
             <if test="sequenceNo != null and sequenceNo != ''">
@@ -35,7 +38,7 @@
                 and course_no=#{courseNo}
             </if>
             <if test="name != null and name != ''">
-                and `name`=#{name}
+                and `name` like concat('%',#{name},'%')
             </if>
             <if test="type != null and type != ''">
                 and `type`=#{type}

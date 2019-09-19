@@ -70,6 +70,33 @@
     <div class="layui-body">
         <!-- 内容主体区域 -->
         <div style="padding: 15px;">
+            <form class="layui-form" id="form-search-condition">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">按学期查找: </label>
+                    <div class="layui-input-inline" style="width: 200px;">
+                        <select name="term">
+                            <option value="">请选择一个学期</option>
+                            <option value="1">大一上</option>
+                            <option value="2">大一下</option>
+                            <option value="3">大二上</option>
+                            <option value="4">大二下</option>
+                            <option value="5">大三上</option>
+                            <option value="6">大三下</option>
+                            <option value="7">大四上</option>
+                            <option value="8">大四下</option>
+                        </select>
+                    </div>
+                    <label class="layui-form-label" style="width:100px">按课程名查找: </label>
+                    <div class="layui-input-inline" style="width: 200px">
+                        <input type="text" name="name" placeholder="请输入课程名" autocomplete="off" class="layui-input"/>
+                    </div>
+                    <div class="layui-input-group">
+                        <button type="button" class="layui-btn" onclick="findCourse()">查询</button>
+                        <button type="reset" class="layui-btn" onclick="location.reload(true);">清除查询条件</button>
+                    </div>
+                </div>
+            </form>
+
             <table class="layui-table " lay-size="sm" style="table-layout:fixed">
                 <colgroup>
                     <col width="5%"><!--学期-->
@@ -141,19 +168,86 @@
 <script src="../custom/js/user.js"></script>
 <script>
     //JavaScript代码区域
-    layui.use('element', function () {
+    layui.use(['form','element','layer'], function () {
         var element = layui.element;
     });
-    $("document").ready(function(){
+
+    $(function(){
+        initCourseList();
+    });
+    function findCourse(){
+        var data = $('#form-search-condition').serialize();
         $.ajax({
-            "url":"/user",
+            "url":"/course",
             "type":"get",
+            "data":data,
             "dataType":"json",
             "success":function(obj){
                 if(obj.state===1){
-                    $('#login-username').html(obj.data.username);
-                    $('#login-uid').html(obj.data.uid);
-                    initCourseList(obj.data.uid);
+                    $("#course-list").empty();
+                    var data = obj.data;
+                    var row='<tr>'
+                        +'<td>#{term}</td>'
+                        +'<td>#{sequence-no}</td>'
+                        +'<td>#{course-no}</td>'
+                        +'<td>#{name}</td>'
+                        +'<td>#{type}</td>'
+                        +'<td>#{credit}</td>'
+                        +'<td>#{score-type}</td>'
+                        +'<td>#{usual-weight}</td>'
+                        +'<td>#{attendance-weight}</td>'
+                        +'<td>#{assignment-weight}</td>'
+                        +'<td>#{experiment-weight}</td>'
+                        +'<td>#{midterm-weight}</td>'
+                        +'<td>#{finalexam-weight}</td>'
+                        +'<td><a href="modifyCourse.html?cid=#{cid}" class="layui-btn layui-btn-sm">修改</a>'
+                        +'<a href="scoreAnalysis.html?cid=#{cid}" class="layui-btn layui-btn-sm">成绩分析</a>'
+                        +'<a href="score.html?cid=#{cid}" class="layui-btn layui-btn-sm">查看成绩</a>'
+                        +'</td></tr>';
+
+                    for(var i =0;i<data.length;i++){
+                        html = row.replace(/#{cid}/g,data[i].cid);
+                        html = html.replace("#{term}",data[i].term);
+                        html = html.replace("#{sequence-no}",data[i].sequenceNo);
+                        html = html.replace("#{course-no}",data[i].courseNo);
+                        html = html.replace("#{name}",data[i].name);
+                        switch(data[i].type){
+                            case 0:
+                            default:
+                                html = html.replace("#{type}","其它");
+                                break;
+                            case 1:
+                                html = html.replace("#{type}","通识教育");
+                                break;
+                            case 2:
+                                html = html.replace("#{type}","学科基础");
+                                break;
+                            case 3:
+                                html = html.replace("#{type}","专业发展");
+                                break;
+                            case 4:
+                                html = html.replace("#{type}","实践环节");
+                                break;
+                        }
+                        html = html.replace("#{credit}",data[i].credit);
+                        switch(data[i].scoreType){
+                            case 0:
+                            default:
+                                html = html.replace("#{score-type}","百分制");
+                                break;
+                            case 1:
+                                html = html.replace("#{score-type}","等级制");
+                                break;
+                        }
+                        html = html.replace("#{usual-weight}",data[i].usualWeight);
+                        html = html.replace("#{assignment-weight}",data[i].assignmentWeight);
+                        html = html.replace("#{attendance-weight}",data[i].attendanceWeight);
+                        html = html.replace("#{experiment-weight}",data[i].experimentWeight);
+                        html = html.replace("#{midterm-weight}",data[i].midtermWeight);
+                        html = html.replace("#{finalexam-weight}",data[i].finalexamWeight);
+                        html.replace(/null/g,'');
+                        $("#course-list").append(html);
+                    }
                 }
                 else{
                     alert(obj.message);
@@ -163,11 +257,11 @@
                 alert(obj.message);
             }
         });
-    });
+    }
 
-    function initCourseList(uid){
+    function initCourseList(){
         $.ajax({
-            "url":"/teacher/"+uid+"/course",
+            "url":"/course",
             "type":"get",
             "dataType":"json",
             "success":function(obj){

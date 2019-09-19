@@ -33,6 +33,7 @@ public class MyWebConfig implements WebMvcConfigurer {
                 patterns.add("/page/login.html");
                 patterns.add("/plugins/**");
                 patterns.add("/user/login");
+                patterns.add("/user/reg");
                 registry.addInterceptor(new LoginHandlerInterceptor()).addPathPatterns("/**").excludePathPatterns(patterns);
             }
         };

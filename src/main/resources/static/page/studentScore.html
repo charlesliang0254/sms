@@ -192,7 +192,7 @@
                             html+=td.replace(/#/,data[i][keys[j]]);
                         }
                         html+="</tr>";
-                        html.replace(/null/g,'');
+                        html = html.replace(/null/g,'');
                         $('#personal-score-list').append(html);
                     }
                 }
@@ -225,7 +225,7 @@
                             html+=td.replace(/#/,data[i][keys[j]]);
                         }
                         html+="</tr>";
-                        html.replace(/null/g,'');
+                        html=html.replace(/null/g,' ');
                         $('#personal-score-list').append(html);
                     }
                 }

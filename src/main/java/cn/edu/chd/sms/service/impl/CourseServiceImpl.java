@@ -13,6 +13,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.List;
 
 import static cn.edu.chd.sms.service.util.ServiceUtil.*;
@@ -47,6 +50,8 @@ public class CourseServiceImpl implements CourseService {
             case 0:
                 break;
             case 1:
+                course.setTeacherId(uid);
+                break;
             case 2:
             default:
                 throw new ServiceException("没有访问权限");
@@ -54,7 +59,12 @@ public class CourseServiceImpl implements CourseService {
         if (course == null) {
             throw new ServiceException("查询错误！");
         }
-        return courseMapper.findCourse(course);
+        LOGGER.debug("name = "+ Arrays.toString((course.getName()==null?"":course.getName()).getBytes()));
+        List<Course> courseList = courseMapper.findCourse(course);
+        if(courseList==null||courseList.isEmpty()){
+            throw new ServiceException("查询不到课程信息");
+        }
+        return courseList;
     }
 
     @Override

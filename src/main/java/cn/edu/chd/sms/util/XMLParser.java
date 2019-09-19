@@ -1,6 +1,5 @@
 package cn.edu.chd.sms.util;
 
-import jdk.internal.util.xml.XMLStreamException;
 import org.dom4j.*;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
@@ -8,11 +7,10 @@ import org.dom4j.io.XMLWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 public class XMLParser {
-    public static void generateXMLFile(String filename,Map<String,Object> map) throws IOException, XMLStreamException {
+    public static void generateXMLFile(String filename,Map<String,Object> map) throws IOException {
         Document document = DocumentHelper.createDocument();
         Element root = document.addElement("analysis");
         createNode(root,map);
