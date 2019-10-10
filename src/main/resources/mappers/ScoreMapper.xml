@@ -38,6 +38,9 @@
             <if test="courseId != null and courseId != ''">
                 and course_id=#{courseId}
             </if>
+            <if test="isSubmitted != null">
+                and is_submitted=#{isSubmitted}
+            </if>
         </where>
     </select>
     <select id="getTotalScorePosition" resultType="java.lang.Integer">

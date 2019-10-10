@@ -245,7 +245,7 @@
                         html = html.replace("#{experiment-weight}",data[i].experimentWeight);
                         html = html.replace("#{midterm-weight}",data[i].midtermWeight);
                         html = html.replace("#{finalexam-weight}",data[i].finalexamWeight);
-                        html.replace(/null/g,'');
+                        html = html.replace(/null/g,'');
                         $("#course-list").append(html);
                     }
                 }
@@ -327,7 +327,7 @@
                         html = html.replace("#{experiment-weight}",data[i].experimentWeight);
                         html = html.replace("#{midterm-weight}",data[i].midtermWeight);
                         html = html.replace("#{finalexam-weight}",data[i].finalexamWeight);
-                        html.replace(/null/g,'');
+                        html = html.replace(/null/g,'');
                         $("#course-list").append(html);
                     }
                 }
